@@ -271,6 +271,14 @@ lexer_next (Lexer *lexer)
           token.type = TOKEN_EQ;
           lexer->pos++;
         }
+      else if (c == '?')
+        {
+          /* comment */
+          while (!(lexer->code[lexer->pos] == '-'
+                   && lexer->code[lexer->pos + 1] == '?'))
+            lexer->pos++;
+          lexer->pos++;
+        }
 
       if (token.type != TOKEN_NULL)
         {
