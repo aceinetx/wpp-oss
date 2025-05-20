@@ -1,0 +1,7 @@
+fn main;
+	call f;
+nf;
+
+fn f;
+	println "Hello, World!";
+nf;
