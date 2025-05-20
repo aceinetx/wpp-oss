@@ -3,5 +3,6 @@ fn main;
 nf;
 
 fn f;
-	println "Hello, World!";
+	println "$main^";
+	println "$f^";
 nf;

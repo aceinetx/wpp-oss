@@ -24,7 +24,8 @@ is_digit (char c)
 static bool
 is_symbol (char c)
 {
-  return (c == '.' || c == ',' || c == '!' || c == ' ');
+  return (c == '.' || c == ',' || c == '!' || c == ' ' || c == '$'
+          || c == '^');
 }
 
 static Token

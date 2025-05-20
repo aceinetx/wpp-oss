@@ -4,28 +4,24 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define TEST_TOKEN(v, t)                                                      \
-  if (v.type != t)                                                            \
-    {                                                                         \
-      sprintf (exec->error, "%d: syntax error", v.line);                      \
-      return false;                                                           \
-    }
+bool do_println (Exec *exec);
 
-static bool
+bool
 do_fn (Exec *exec)
 {
-  Object fn;
+  Object *fn = malloc (sizeof (Object));
   Token name, token;
-  fn.type = OBJ_FUNCTION;
+  fn->type = OBJ_FUNCTION;
 
   name = lexer_next (exec->lexer);
-  TEST_TOKEN (name, TOKEN_IDENTIFIER);
+  DO_TEST_TOKEN (name, TOKEN_IDENTIFIER);
 
-  fn.as.function.name = name.as.str;
-  fn.as.function.pos = exec->lexer->pos + 1;
+  fn->name = name.as.str;
+  fn->as.function.name = name.as.str;
+  fn->as.function.pos = exec->lexer->pos + 1;
 
   /* append the function to the function list */
-  exec->vars_capacity += sizeof (Object);
+  exec->vars_capacity += sizeof (Object *);
   exec->vars = realloc (exec->vars, exec->vars_capacity);
   exec->vars[exec->vars_len] = fn;
   exec->vars_len++;
@@ -38,35 +34,23 @@ do_fn (Exec *exec)
   while (token.type != TOKEN_NF);
   lexer_next (exec->lexer);
 
-  return true;
-}
-
-static bool
-do_println (Exec *exec)
-{
-  Token string;
-
-  string = lexer_next (exec->lexer);
-  TEST_TOKEN (string, TOKEN_STRING);
-
-  printf ("%s\n", string.as.str);
+  arena_append (&exec->objects_arena, fn);
 
   return true;
 }
 
-static bool
+bool
 do_call (Exec *exec)
 {
   Token name;
 
   name = lexer_next (exec->lexer);
-  TEST_TOKEN (name, TOKEN_IDENTIFIER);
+  DO_TEST_TOKEN (name, TOKEN_IDENTIFIER);
 
   if (exec_fcall (exec, name.as.str) == FCALL_FAIL)
     return false;
   return true;
 }
-#undef TEST_TOKEN
 
 Exec *
 exec_new (Lexer *lexer)
@@ -75,7 +59,7 @@ exec_new (Lexer *lexer)
   memset (exec, 0, sizeof (Exec));
 
   exec->lexer = lexer;
-  exec->strings_arena = arena_new ();
+  exec->objects_arena = arena_new ();
   return exec;
 }
 
@@ -87,7 +71,7 @@ exec_free (Exec *exec)
       free (exec->vars);
     }
 
-  arena_free (&exec->strings_arena);
+  arena_free (&exec->objects_arena);
   free (exec);
 }
 
@@ -97,7 +81,7 @@ exec_fcall (Exec *exec, const char *name)
   unsigned int i;
   for (i = 0; i < exec->vars_len; i++)
     {
-      Object *obj = &exec->vars[i];
+      Object *obj = exec->vars[i];
       if (obj->type == OBJ_FUNCTION)
         {
           if (strcmp (obj->as.function.name, name) == 0)
@@ -108,6 +92,19 @@ exec_fcall (Exec *exec, const char *name)
         }
     }
   return FCALL_FAIL;
+}
+
+Object *
+exec_getvar (Exec *exec, const char *name)
+{
+  unsigned int i;
+  for (i = 0; i < exec->vars_len; i++)
+    {
+      Object *obj = exec->vars[i];
+      if (strcmp (obj->name, name) == 0)
+        return obj;
+    }
+  return NULL;
 }
 
 void

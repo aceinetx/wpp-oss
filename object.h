@@ -23,6 +23,8 @@ typedef struct
     float _float;
     char *string;
   } as;
+
+  char *name;
 } Object;
 
 #endif
