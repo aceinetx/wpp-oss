@@ -2,6 +2,7 @@
 
 CC = cc
 CFLAGS = -std=c90 -Wall -Wextra -Wpedantic -Werror -O0 -ggdb
+LDFLAGS = -static
 
 all: wpp
 clean:
@@ -9,7 +10,7 @@ clean:
 
 # executables
 wpp: wpp.o lexer.o arena.o exec.o object.o exec_print.o exec_fn.o exec_var.o
-	$(CC) -o $@ $^
+	$(CC) $(LDFLAGS) -o $@ $^
 
 # objects
 wpp.o: wpp.c lexer.h exec.h
