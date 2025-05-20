@@ -32,7 +32,7 @@ is_symbol (char c)
 */
 
 static Token
-token_new ()
+token_new (void)
 {
   Token token;
   token.line = 0;

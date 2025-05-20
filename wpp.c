@@ -6,7 +6,7 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
-static void usage ();
+static void usage (void);
 
 int
 main (int argc, char **argv)
@@ -67,7 +67,7 @@ main (int argc, char **argv)
 }
 
 static void
-usage ()
+usage (void)
 {
   puts ("usage: wpp [filename]");
 }
