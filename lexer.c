@@ -1,5 +1,6 @@
 #include "lexer.h"
 #include "wpp.h"
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -140,6 +141,92 @@ lexer_string (Lexer *lexer)
 }
 
 Token
+lexer_number (Lexer *lexer)
+{
+  Token tok;
+  bool is_hex;
+
+  tok = token_new ();
+  tok.type = TOKEN_INT;
+  tok.line = lexer->line;
+
+  is_hex = false;
+
+  while (lexer->pos < strlen (lexer->code))
+    {
+      char c = lexer->code[lexer->pos];
+      if (!is_digit (c) && !is_hex)
+        {
+          if (c == 'x')
+            {
+              is_hex = true;
+              tok.as.number = 0;
+              lexer->pos++;
+              continue;
+            }
+          else
+            {
+              break;
+            }
+        }
+
+      if (is_hex)
+        {
+          bool invalid;
+
+          invalid = false;
+          tok.as.number *= 16;
+
+          if (is_digit (c))
+            {
+              tok.as.number += c - '0';
+            }
+          else
+            {
+              switch (c)
+                {
+                case 'a':
+                  tok.as.number += 0xa;
+                  break;
+                case 'b':
+                  tok.as.number += 0xb;
+                  break;
+                case 'c':
+                  tok.as.number += 0xc;
+                  break;
+                case 'd':
+                  tok.as.number += 0xd;
+                  break;
+                case 'e':
+                  tok.as.number += 0xe;
+                  break;
+                case 'f':
+                  tok.as.number += 0xf;
+                  break;
+                default:
+                  invalid = true;
+                  break;
+                }
+            }
+          if (invalid)
+            {
+              tok.as.number /= 16;
+              break;
+            }
+        }
+      else
+        {
+          tok.as.number *= 10;
+
+          tok.as.number += c - '0';
+        }
+      lexer->pos++;
+    }
+
+  return tok;
+}
+
+Token
 lexer_next (Lexer *lexer)
 {
   Token token = token_new ();
@@ -163,7 +250,12 @@ lexer_next (Lexer *lexer)
           DO_IDENTIFIR ("print", TOKEN_PRINT);
           DO_IDENTIFIR ("println", TOKEN_PRINTLN);
           DO_IDENTIFIR ("call", TOKEN_CALL);
+          DO_IDENTIFIR ("var", TOKEN_VAR);
 #undef DO_IDENTIFIR
+        }
+      else if (is_digit (c))
+        {
+          token = lexer_number (lexer);
         }
       else if (c == '"')
         {
@@ -172,6 +264,11 @@ lexer_next (Lexer *lexer)
       else if (c == ';')
         {
           token.type = TOKEN_SEMICOLON;
+          lexer->pos++;
+        }
+      else if (c == '=')
+        {
+          token.type = TOKEN_EQ;
           lexer->pos++;
         }
 

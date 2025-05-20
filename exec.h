@@ -26,6 +26,7 @@ typedef struct
   unsigned int vars_capacity;
 
   Arena objects_arena;
+  Arena strings_arena;
 } Exec;
 
 Exec *exec_new (Lexer *lexer);
@@ -33,6 +34,8 @@ void exec_free (Exec *exec);
 
 int exec_fcall (Exec *exec, const char *name);
 Object *exec_getvar (Exec *exec, const char *name);
+Object *exec_assign (Exec *exec, const char *name, Object object);
+
 void exec_run (Exec *exec);
 
 #endif

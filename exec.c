@@ -8,6 +8,7 @@ bool do_print (Exec *exec);
 bool do_println (Exec *exec);
 bool do_fn (Exec *exec);
 bool do_call (Exec *exec);
+bool do_var (Exec *exec);
 
 Exec *
 exec_new (Lexer *lexer)
@@ -17,6 +18,7 @@ exec_new (Lexer *lexer)
 
   exec->lexer = lexer;
   exec->objects_arena = arena_new ();
+  exec->strings_arena = arena_new ();
   return exec;
 }
 
@@ -29,6 +31,7 @@ exec_free (Exec *exec)
     }
 
   arena_free (&exec->objects_arena);
+  arena_free (&exec->strings_arena);
   free (exec);
 }
 
@@ -51,19 +54,6 @@ exec_fcall (Exec *exec, const char *name)
   return FCALL_FAIL;
 }
 
-Object *
-exec_getvar (Exec *exec, const char *name)
-{
-  unsigned int i;
-  for (i = 0; i < exec->vars_len; i++)
-    {
-      Object *obj = exec->vars[i];
-      if (strcmp (obj->name, name) == 0)
-        return obj;
-    }
-  return NULL;
-}
-
 void
 exec_run (Exec *exec)
 {
@@ -84,6 +74,7 @@ exec_run (Exec *exec)
       DO_TOKEN (TOKEN_PRINTLN, do_println);
       DO_TOKEN (TOKEN_PRINT, do_print);
       DO_TOKEN (TOKEN_CALL, do_call);
+      DO_TOKEN (TOKEN_VAR, do_var);
 
 #undef DO_TOKEN
       token = lexer_next (exec->lexer);

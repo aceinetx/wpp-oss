@@ -1,4 +1,5 @@
 fn main;
-	print "Hello, ";
-	println "World";
+	var x = 69;
+	var x = 123;
+	println "x = $x^";
 nf;

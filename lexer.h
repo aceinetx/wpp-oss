@@ -11,6 +11,8 @@ typedef struct
     TOKEN_NULL = 0,
     TOKEN_END,
 
+    TOKEN_INT,
+
     TOKEN_IDENTIFIER,
     TOKEN_STRING,
 
@@ -21,6 +23,10 @@ typedef struct
     TOKEN_PRINTLN,
 
     TOKEN_CALL,
+
+    TOKEN_VAR,
+
+    TOKEN_EQ,
 
     TOKEN_SEMICOLON
   } type;
