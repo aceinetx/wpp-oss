@@ -21,12 +21,14 @@ is_digit (char c)
   return (c >= '0' && c <= '9');
 }
 
+/*
 static bool
 is_symbol (char c)
 {
   return (c == '.' || c == ',' || c == '!' || c == ' ' || c == '$'
           || c == '^');
 }
+*/
 
 static Token
 token_new ()
@@ -109,23 +111,16 @@ lexer_string (Lexer *lexer)
     {
       char c = lexer->code[lexer->pos];
 
-      if (!is_letter (c) && !is_digit (c) && !is_symbol (c))
+      if (c == '"')
         {
-          if (c == '"')
+          if (definition)
             {
-              if (definition)
-                {
-                  lexer->pos++;
-                  break;
-                }
-              definition = true;
               lexer->pos++;
-              continue;
-            }
-          else
-            {
               break;
             }
+          definition = true;
+          lexer->pos++;
+          continue;
         }
 
       if (definition)

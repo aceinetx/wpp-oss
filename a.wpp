@@ -3,6 +3,6 @@ fn main;
 nf;
 
 fn f;
-	println "$main^";
-	println "$f^";
+	println "main function: $main^";
+	println "f function: $f^";
 nf;
