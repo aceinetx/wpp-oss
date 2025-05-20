@@ -2,7 +2,7 @@
 
 CC = cc
 CFLAGS = -std=c90 -Wall -Wextra -Wpedantic -Werror -O0 -ggdb
-LDFLAGS = -static
+LDFLAGS =
 
 all: wpp
 clean:
