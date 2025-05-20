@@ -12,10 +12,22 @@ do_println (Exec *exec)
   char *varname;
   char *varname_c;
 
+  varname = NULL;
+
   string = lexer_next (exec->lexer);
   DO_TEST_TOKEN (string, TOKEN_STRING);
 
-  varname = malloc (strlen (string.as.str));
+  /* Do we even need to allocate varname? */
+  c = string.as.str;
+  while (*c)
+    {
+      if (*c == '$')
+        {
+          varname = malloc (strlen (string.as.str));
+          break;
+        }
+      c++;
+    }
 
   c = string.as.str;
   while (*c)
@@ -62,7 +74,9 @@ do_println (Exec *exec)
     }
 
   putchar ('\n');
-  free (varname);
+
+  if (varname)
+    free (varname);
 
   return true;
 }

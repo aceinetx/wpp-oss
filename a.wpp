@@ -1,8 +1,3 @@
 fn main;
-	call f;
-nf;
-
-fn f;
-	println "main function: $main^";
-	println "f function: $f^";
+	println "Hello, World!";
 nf;
