@@ -8,7 +8,7 @@ clean:
 	rm -rf wpp *.o
 
 # executables
-wpp: wpp.o lexer.o arena.o exec.o object.o exec_print.o
+wpp: wpp.o lexer.o arena.o exec.o object.o exec_print.o exec_fn.o
 	$(CC) -o $@ $^
 
 # objects
@@ -25,6 +25,9 @@ exec.o: exec.c exec.h wpp.h
 	$(CC) -c -o $@ $(CFLAGS) $<
 
 exec_print.o: exec_print.c exec.h wpp.h
+	$(CC) -c -o $@ $(CFLAGS) $<
+
+exec_fn.o: exec_fn.c exec.h wpp.h
 	$(CC) -c -o $@ $(CFLAGS) $<
 
 object.o: object.c object.h
