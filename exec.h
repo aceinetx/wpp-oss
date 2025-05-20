@@ -6,7 +6,7 @@
 #define DO_TEST_TOKEN(v, t)                                                   \
   if (v.type != t)                                                            \
     {                                                                         \
-      sprintf (exec->error, "%d: syntax error", v.line);                      \
+      sprintf (exec->error, "syntax error");                                  \
       return false;                                                           \
     }
 
