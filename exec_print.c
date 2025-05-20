@@ -5,7 +5,7 @@
 #include <string.h>
 
 bool
-do_println (Exec *exec)
+do_print (Exec *exec)
 {
   Token string;
   char *c;
@@ -17,7 +17,7 @@ do_println (Exec *exec)
   string = lexer_next (exec->lexer);
   DO_TEST_TOKEN (string, TOKEN_STRING);
 
-  /* Do we even need to allocate varname? */
+  /* do we even need to allocate varname? */
   c = string.as.str;
   while (*c)
     {
@@ -51,6 +51,15 @@ do_println (Exec *exec)
             {
               switch (var->type)
                 {
+                case OBJ_INT:
+                  printf ("%d", var->as._int);
+                  break;
+                case OBJ_FLOAT:
+                  printf ("%f", var->as._float);
+                  break;
+                case OBJ_STRING:
+                  printf ("%s", var->as.string);
+                  break;
                 case OBJ_FUNCTION:
                   printf ("<function %s at %p:%d>", varname, (void *)var,
                           var->as.function.pos);
@@ -73,10 +82,17 @@ do_println (Exec *exec)
       c++;
     }
 
-  putchar ('\n');
-
   if (varname)
     free (varname);
 
+  return true;
+}
+
+bool
+do_println (Exec *exec)
+{
+  do_print (exec);
+
+  putchar ('\n');
   return true;
 }

@@ -17,6 +17,7 @@ typedef struct
     TOKEN_FN,
     TOKEN_NF,
 
+    TOKEN_PRINT,
     TOKEN_PRINTLN,
 
     TOKEN_CALL,

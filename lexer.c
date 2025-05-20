@@ -160,6 +160,7 @@ lexer_next (Lexer *lexer)
     token.type = v;
           DO_IDENTIFIR ("fn", TOKEN_FN);
           DO_IDENTIFIR ("nf", TOKEN_NF);
+          DO_IDENTIFIR ("print", TOKEN_PRINT);
           DO_IDENTIFIR ("println", TOKEN_PRINTLN);
           DO_IDENTIFIR ("call", TOKEN_CALL);
 #undef DO_IDENTIFIR

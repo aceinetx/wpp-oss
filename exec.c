@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+bool do_print (Exec *exec);
 bool do_println (Exec *exec);
 bool do_fn (Exec *exec);
 bool do_call (Exec *exec);
@@ -74,21 +75,17 @@ exec_run (Exec *exec)
   token = lexer_next (exec->lexer);
   while (token.type != TOKEN_END)
     {
-      if (token.type == TOKEN_FN)
-        {
-          if (!do_fn (exec))
-            return;
-        }
-      else if (token.type == TOKEN_PRINTLN)
-        {
-          if (!do_println (exec))
-            return;
-        }
-      else if (token.type == TOKEN_CALL)
-        {
-          if (!do_call (exec))
-            return;
-        }
+#define DO_TOKEN(t, f)                                                        \
+  if (token.type == t)                                                        \
+    if (!f (exec))                                                            \
+      return;
+
+      DO_TOKEN (TOKEN_FN, do_fn);
+      DO_TOKEN (TOKEN_PRINTLN, do_println);
+      DO_TOKEN (TOKEN_PRINT, do_print);
+      DO_TOKEN (TOKEN_CALL, do_call);
+
+#undef DO_TOKEN
       token = lexer_next (exec->lexer);
     }
 
