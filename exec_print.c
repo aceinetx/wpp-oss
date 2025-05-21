@@ -62,11 +62,10 @@ do_print (Exec *exec)
                   printf ("%s", var->as.string);
                   break;
                 case OBJ_FUNCTION:
-                  printf ("<function %s at %p:%d>", varname, (void *)var,
-                          var->as.function.pos);
+                  printf ("<function %s at %p>", varname, (void *)var);
                   break;
                 default:
-                  printf ("<unhandled var type>");
+                  printf ("<%s of type %d>", varname, var->type);
                   break;
                 }
             }

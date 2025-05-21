@@ -64,40 +64,38 @@ do_var (Exec *exec)
   DO_TEST_TOKEN (value, TOKEN_INT);
   DO_TEST_TOKEN (lexer_next (exec->lexer), TOKEN_SEMICOLON);
 
+  object.type = OBJ_INT;
+  object.as._int = value.as.number;
+  object.name = name.as.str;
+
   var = exec_getvar (exec, name.as.str);
+  if (!var)
+    {
+      exec_assign (exec, name.as.str, object);
+    }
 
   switch (eq.type)
     {
     case TOKEN_EQ:
-      object.type = OBJ_INT;
-      object.as._int = value.as.number;
-      object.name = name.as.str;
-
-      exec_assign (exec, name.as.str, object);
+      if (var)
+        if (!exec_obj_eq (exec, var, &object))
+          return false;
       break;
     case TOKEN_ADD:
-      if (var->type == OBJ_INT)
-        var->as._int += (int)value.as.number;
-      else if (var->type == OBJ_FLOAT)
-        var->as._int += (int)value.as.number;
+      if (!exec_obj_add (exec, var, &object))
+        return false;
       break;
     case TOKEN_SUB:
-      if (var->type == OBJ_INT)
-        var->as._int -= (int)value.as.number;
-      else if (var->type == OBJ_FLOAT)
-        var->as._int -= (int)value.as.number;
+      if (!exec_obj_sub (exec, var, &object))
+        return false;
       break;
     case TOKEN_MUL:
-      if (var->type == OBJ_INT)
-        var->as._int *= (int)value.as.number;
-      else if (var->type == OBJ_FLOAT)
-        var->as._int *= (int)value.as.number;
+      if (!exec_obj_mul (exec, var, &object))
+        return false;
       break;
     case TOKEN_DIV:
-      if (var->type == OBJ_INT)
-        var->as._int /= (int)value.as.number;
-      else if (var->type == OBJ_FLOAT)
-        var->as._int /= (int)value.as.number;
+      if (!exec_obj_div (exec, var, &object))
+        return false;
       break;
     default:
       printf ("wpp: syntax error\n");

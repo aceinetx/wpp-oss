@@ -1,8 +1,12 @@
-fn print_main;
-	println "$main^";
+fn a;
+nf;
+
+fn b;
 nf;
 
 fn main;
-	call print_main;
+	println "$a^";
+	println "$b^";
+	println "$main^";
 nf;
 

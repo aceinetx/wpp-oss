@@ -22,15 +22,6 @@ is_digit (char c)
   return (c >= '0' && c <= '9');
 }
 
-/*
-static bool
-is_symbol (char c)
-{
-  return (c == '.' || c == ',' || c == '!' || c == ' ' || c == '$'
-          || c == '^');
-}
-*/
-
 static Token
 token_new (void)
 {
@@ -139,85 +130,76 @@ lexer_string (Lexer *lexer)
   return tok;
 }
 
+static int
+hex_char_to_value (char c)
+{
+  if (c >= '0' && c <= '9')
+    {
+      return c - '0';
+    }
+  else if (c >= 'a' && c <= 'f')
+    {
+      return 10 + (c - 'a');
+    }
+  else if (c >= 'A' && c <= 'F')
+    {
+      return 10 + (c - 'A');
+    }
+  return -1; /* invalid character */
+}
+
 static Token
 lexer_number (Lexer *lexer)
 {
   Token tok;
   bool is_hex;
+  size_t length;
+  char c;
+  int value;
 
   tok = token_new ();
   tok.type = TOKEN_INT;
   tok.line = lexer->line;
 
   is_hex = false;
+  tok.as.number = 0;
 
-  while (lexer->pos < strlen (lexer->code))
+  length = strlen (lexer->code);
+
+  while (lexer->pos < length)
     {
-      char c = lexer->code[lexer->pos];
+      c = lexer->code[lexer->pos];
+
       if (!is_digit (c) && !is_hex)
         {
           if (c == 'x')
             {
               is_hex = true;
-              tok.as.number = 0;
               lexer->pos++;
               continue;
             }
           else
             {
-              break;
+              break; /* invalid character for number */
             }
         }
 
       if (is_hex)
         {
-          bool invalid;
-
-          invalid = false;
-          tok.as.number *= 16;
-
-          if (is_digit (c))
+          value = hex_char_to_value (c);
+          if (value == -1)
             {
-              tok.as.number += c - '0';
+              break; /* invalid hex character */
             }
-          else
-            {
-              switch (c)
-                {
-                case 'a':
-                  tok.as.number += 0xa;
-                  break;
-                case 'b':
-                  tok.as.number += 0xb;
-                  break;
-                case 'c':
-                  tok.as.number += 0xc;
-                  break;
-                case 'd':
-                  tok.as.number += 0xd;
-                  break;
-                case 'e':
-                  tok.as.number += 0xe;
-                  break;
-                case 'f':
-                  tok.as.number += 0xf;
-                  break;
-                default:
-                  invalid = true;
-                  break;
-                }
-            }
-          if (invalid)
-            {
-              tok.as.number /= 16;
-              break;
-            }
+          tok.as.number = (tok.as.number * 16) + value;
         }
       else
         {
-          tok.as.number *= 10;
-
-          tok.as.number += c - '0';
+          if (!is_digit (c))
+            {
+              break; /* Invalid character for decimal number */
+            }
+          tok.as.number = (tok.as.number * 10) + (c - '0');
         }
       lexer->pos++;
     }
