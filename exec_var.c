@@ -28,7 +28,9 @@ exec_assign (Exec *exec, const char *name, Object object)
       Object *obj = exec->vars[i];
       if (strcmp (obj->name, name) == 0)
         {
+          char *old_name = obj->name;
           memcpy (obj, &object, sizeof (Object));
+          obj->name = old_name;
           return obj;
         }
     }
