@@ -1,4 +1,4 @@
 fn main;
-	var x = 69;
-	println "$x^ $main^";
+	scanln x;
+	println "$x^";
 nf;

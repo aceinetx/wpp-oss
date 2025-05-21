@@ -16,6 +16,7 @@ do_print (Exec *exec)
 
   string = lexer_next (exec->lexer);
   DO_TEST_TOKEN (string, TOKEN_STRING);
+  DO_TEST_TOKEN (lexer_next (exec->lexer), TOKEN_SEMICOLON);
 
   /* do we even need to allocate varname? */
   c = string.as.str;

@@ -9,6 +9,8 @@ bool do_println (Exec *exec);
 bool do_fn (Exec *exec);
 bool do_call (Exec *exec);
 bool do_var (Exec *exec);
+bool do_cp (Exec *exec);
+bool do_scanln (Exec *exec);
 
 Exec *
 exec_new (Lexer *lexer)
@@ -75,6 +77,8 @@ exec_run (Exec *exec)
       DO_TOKEN (TOKEN_PRINT, do_print);
       DO_TOKEN (TOKEN_CALL, do_call);
       DO_TOKEN (TOKEN_VAR, do_var);
+      DO_TOKEN (TOKEN_CP, do_cp);
+      DO_TOKEN (TOKEN_SCANLN, do_scanln);
 
 #undef DO_TOKEN
       token = lexer_next (exec->lexer);

@@ -9,7 +9,7 @@ clean:
 	rm -rf wpp *.o
 
 # executables
-wpp: wpp.o lexer.o arena.o exec.o object.o exec_print.o exec_fn.o exec_var.o
+wpp: wpp.o lexer.o arena.o exec.o object.o exec_print.o exec_fn.o exec_var.o exec_copy.o exec_scanln.o
 	$(CC) $(LDFLAGS) -o $@ $^
 
 # objects
@@ -32,6 +32,12 @@ exec_fn.o: exec_fn.c exec.h wpp.h
 	$(CC) -c -o $@ $(CFLAGS) $<
 
 exec_var.o: exec_var.c exec.h wpp.h
+	$(CC) -c -o $@ $(CFLAGS) $<
+
+exec_copy.o: exec_copy.c exec.h wpp.h
+	$(CC) -c -o $@ $(CFLAGS) $<
+
+exec_scanln.o: exec_scanln.c exec.h wpp.h
 	$(CC) -c -o $@ $(CFLAGS) $<
 
 object.o: object.c object.h

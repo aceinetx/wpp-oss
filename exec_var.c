@@ -54,20 +54,55 @@ bool
 do_var (Exec *exec)
 {
   Object object;
+  Object *var;
   Token name, eq, value;
 
   name = lexer_next (exec->lexer);
   eq = lexer_next (exec->lexer);
   value = lexer_next (exec->lexer);
   DO_TEST_TOKEN (name, TOKEN_IDENTIFIER);
-  DO_TEST_TOKEN (eq, TOKEN_EQ);
   DO_TEST_TOKEN (value, TOKEN_INT);
+  DO_TEST_TOKEN (lexer_next (exec->lexer), TOKEN_SEMICOLON);
 
-  object.type = OBJ_INT;
-  object.as._int = value.as.number;
-  object.name = name.as.str;
+  var = exec_getvar (exec, name.as.str);
 
-  exec_assign (exec, name.as.str, object);
+  switch (eq.type)
+    {
+    case TOKEN_EQ:
+      object.type = OBJ_INT;
+      object.as._int = value.as.number;
+      object.name = name.as.str;
+
+      exec_assign (exec, name.as.str, object);
+      break;
+    case TOKEN_ADD:
+      if (var->type == OBJ_INT)
+        var->as._int += (int)value.as.number;
+      else if (var->type == OBJ_FLOAT)
+        var->as._int += (int)value.as.number;
+      break;
+    case TOKEN_SUB:
+      if (var->type == OBJ_INT)
+        var->as._int -= (int)value.as.number;
+      else if (var->type == OBJ_FLOAT)
+        var->as._int -= (int)value.as.number;
+      break;
+    case TOKEN_MUL:
+      if (var->type == OBJ_INT)
+        var->as._int *= (int)value.as.number;
+      else if (var->type == OBJ_FLOAT)
+        var->as._int *= (int)value.as.number;
+      break;
+    case TOKEN_DIV:
+      if (var->type == OBJ_INT)
+        var->as._int /= (int)value.as.number;
+      else if (var->type == OBJ_FLOAT)
+        var->as._int /= (int)value.as.number;
+      break;
+    default:
+      printf ("wpp: syntax error\n");
+      return false;
+    }
 
   return true;
 }

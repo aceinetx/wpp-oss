@@ -59,6 +59,7 @@ lexer_free (Lexer *lexer)
   free (lexer);
 }
 
+/* this doesn't append to strings arena: you'll have to do it manually */
 static Token
 lexer_identifier (Lexer *lexer)
 {
@@ -87,8 +88,6 @@ lexer_identifier (Lexer *lexer)
 
       lexer->pos++;
     }
-
-  arena_append (&lexer->strings_arena, tok.as.str);
 
   return tok;
 }
@@ -251,7 +250,13 @@ lexer_next (Lexer *lexer)
           DO_IDENTIFIR ("println", TOKEN_PRINTLN);
           DO_IDENTIFIR ("call", TOKEN_CALL);
           DO_IDENTIFIR ("var", TOKEN_VAR);
+          DO_IDENTIFIR ("cp", TOKEN_CP);
+          DO_IDENTIFIR ("scanln", TOKEN_SCANLN);
 #undef DO_IDENTIFIR
+          if (token.type == TOKEN_IDENTIFIER)
+            arena_append (&lexer->strings_arena, token.as.str);
+          else
+            free (token.as.str);
         }
       else if (is_digit (c))
         {
@@ -269,6 +274,26 @@ lexer_next (Lexer *lexer)
       else if (c == '=')
         {
           token.type = TOKEN_EQ;
+          lexer->pos++;
+        }
+      else if (c == '+')
+        {
+          token.type = TOKEN_ADD;
+          lexer->pos++;
+        }
+      else if (c == '-')
+        {
+          token.type = TOKEN_SUB;
+          lexer->pos++;
+        }
+      else if (c == '*')
+        {
+          token.type = TOKEN_MUL;
+          lexer->pos++;
+        }
+      else if (c == '/')
+        {
+          token.type = TOKEN_DIV;
           lexer->pos++;
         }
       else if (c == '?')

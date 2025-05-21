@@ -12,6 +12,7 @@ do_fn (Exec *exec)
 
   name = lexer_next (exec->lexer);
   DO_TEST_TOKEN (name, TOKEN_IDENTIFIER);
+  DO_TEST_TOKEN (lexer_next (exec->lexer), TOKEN_SEMICOLON);
 
   fn->name = name.as.str;
   fn->as.function.name = name.as.str;
@@ -29,7 +30,7 @@ do_fn (Exec *exec)
       token = lexer_next (exec->lexer);
     }
   while (token.type != TOKEN_NF);
-  lexer_next (exec->lexer);
+  DO_TEST_TOKEN (lexer_next (exec->lexer), TOKEN_SEMICOLON);
 
   arena_append (&exec->objects_arena, fn);
 

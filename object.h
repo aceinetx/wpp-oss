@@ -1,15 +1,17 @@
 #ifndef OBJECT_H
 #define OBJECT_H
 
+enum
+{
+  OBJ_INT,
+  OBJ_FLOAT,
+  OBJ_STRING,
+  OBJ_FUNCTION
+};
+
 typedef struct
 {
-  enum
-  {
-    OBJ_INT,
-    OBJ_FLOAT,
-    OBJ_STRING,
-    OBJ_FUNCTION
-  } type;
+  unsigned char type;
 
   union
   {
