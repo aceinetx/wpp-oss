@@ -4,7 +4,7 @@
 #include "arena.h"
 #include <stdint.h>
 
-enum
+enum TokenType
 {
   TOKEN_NULL = 0,
   TOKEN_END,
@@ -38,7 +38,7 @@ enum
 
 typedef struct
 {
-  unsigned char type;
+  enum TokenType type;
 
   union
   {

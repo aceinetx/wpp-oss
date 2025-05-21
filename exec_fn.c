@@ -4,6 +4,18 @@
 #include <stdlib.h>
 
 bool
+do_nf (Exec *exec)
+{
+  unsigned int pos = exec_pop_ret_stack (exec);
+  if (*exec->error)
+    return false;
+
+  exec->lexer->pos = pos;
+
+  return true;
+}
+
+bool
 do_fn (Exec *exec)
 {
   Object *fn = malloc (sizeof (Object));
@@ -44,6 +56,7 @@ do_call (Exec *exec)
 
   name = lexer_next (exec->lexer);
   DO_TEST_TOKEN (name, TOKEN_IDENTIFIER);
+  DO_TEST_TOKEN (lexer_next (exec->lexer), TOKEN_SEMICOLON);
 
   if (exec_fcall (exec, name.as.str) == FCALL_FAIL)
     return false;

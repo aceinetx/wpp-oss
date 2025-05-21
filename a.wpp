@@ -1,4 +1,6 @@
+var i = 0;
+
 fn main;
-	scanln x;
-	println "$x^";
+	println "$i^";
 nf;
+

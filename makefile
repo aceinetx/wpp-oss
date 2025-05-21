@@ -1,7 +1,7 @@
 .PHONY: all
 
 CC = cc
-CFLAGS = -std=c90 -Wall -Wextra -Wpedantic -Werror -O0 -ggdb
+CFLAGS = -std=c90 -Wall -Wextra -Wpedantic -Werror -Oz
 LDFLAGS =
 
 all: wpp
@@ -9,7 +9,7 @@ clean:
 	rm -rf wpp *.o
 
 # executables
-wpp: wpp.o lexer.o arena.o exec.o object.o exec_print.o exec_fn.o exec_var.o exec_copy.o exec_scanln.o
+wpp: wpp.o lexer.o arena.o exec.o object.o exec_print.o exec_fn.o exec_var.o exec_copy.o exec_scanln.o exec_ret_stack.o
 	$(CC) $(LDFLAGS) -o $@ $^
 
 # objects
@@ -38,6 +38,9 @@ exec_copy.o: exec_copy.c exec.h wpp.h
 	$(CC) -c -o $@ $(CFLAGS) $<
 
 exec_scanln.o: exec_scanln.c exec.h wpp.h
+	$(CC) -c -o $@ $(CFLAGS) $<
+
+exec_ret_stack.o: exec_ret_stack.c exec.h
 	$(CC) -c -o $@ $(CFLAGS) $<
 
 object.o: object.c object.h

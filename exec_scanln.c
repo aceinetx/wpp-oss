@@ -2,6 +2,7 @@
 #include "object.h"
 #include "wpp.h"
 #include <stdio.h>
+#include <string.h>
 
 bool
 do_scanln (Exec *exec)

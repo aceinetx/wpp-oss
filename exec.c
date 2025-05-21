@@ -7,6 +7,7 @@
 bool do_print (Exec *exec);
 bool do_println (Exec *exec);
 bool do_fn (Exec *exec);
+bool do_nf (Exec *exec);
 bool do_call (Exec *exec);
 bool do_var (Exec *exec);
 bool do_cp (Exec *exec);
@@ -21,6 +22,7 @@ exec_new (Lexer *lexer)
   exec->lexer = lexer;
   exec->objects_arena = arena_new ();
   exec->strings_arena = arena_new ();
+  exec->ret_stack_top = -1;
   return exec;
 }
 
@@ -48,6 +50,10 @@ exec_fcall (Exec *exec, const char *name)
         {
           if (strcmp (obj->as.function.name, name) == 0)
             {
+              if (exec_push_ret_stack (exec, exec->lexer->pos) == PUSH_FAIL)
+                {
+                  return FCALL_FAIL;
+                }
               exec->lexer->pos = obj->as.function.pos;
               return FCALL_SUCCESS;
             }
@@ -73,12 +79,16 @@ exec_run (Exec *exec)
       return;
 
       DO_TOKEN (TOKEN_FN, do_fn);
-      DO_TOKEN (TOKEN_PRINTLN, do_println);
-      DO_TOKEN (TOKEN_PRINT, do_print);
-      DO_TOKEN (TOKEN_CALL, do_call);
+      DO_TOKEN (TOKEN_NF, do_nf);
       DO_TOKEN (TOKEN_VAR, do_var);
-      DO_TOKEN (TOKEN_CP, do_cp);
-      DO_TOKEN (TOKEN_SCANLN, do_scanln);
+      if (main_iteration)
+        {
+          DO_TOKEN (TOKEN_PRINTLN, do_println);
+          DO_TOKEN (TOKEN_PRINT, do_print);
+          DO_TOKEN (TOKEN_CALL, do_call);
+          DO_TOKEN (TOKEN_CP, do_cp);
+          DO_TOKEN (TOKEN_SCANLN, do_scanln);
+        }
 
 #undef DO_TOKEN
       token = lexer_next (exec->lexer);
