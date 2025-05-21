@@ -2,13 +2,18 @@
 #include "wpp.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 bool
 do_nf (Exec *exec)
 {
   unsigned int pos = exec_pop_ret_stack (exec);
   if (*exec->error)
-    return false;
+    {
+      /* we are probably exiting from the main function */
+      memset (exec->error, 0, sizeof (exec->error));
+      return false;
+    }
 
   exec->lexer->pos = pos;
 

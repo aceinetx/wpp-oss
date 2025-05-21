@@ -1,6 +1,8 @@
-var i = 0;
+fn print_main;
+	println "$main^";
+nf;
 
 fn main;
-	println "$i^";
+	call print_main;
 nf;
 
