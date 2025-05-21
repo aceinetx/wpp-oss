@@ -1,52 +1,55 @@
-.PHONY: all
+.PHONY: all 
 
 CC = cc
-CFLAGS = -std=c90 -Wall -Wextra -Wpedantic -Werror -Oz -ggdb
+CFLAGS = -std=c90 -Wall -Wextra -Wpedantic -Werror -Os -ggdb
 LDFLAGS =
+BUILDDIR = build/
 
-all: wpp
+all: $(BUILDDIR) $(BUILDDIR)wpp
 clean:
-	rm -rf wpp *.o
+	rm $(BUILDDIR)*.o $(BUILDDIR)wpp
 
-# executables
-wpp: wpp.o lexer.o arena.o exec.o object.o exec_print.o exec_fn.o exec_var.o exec_copy.o exec_scanln.o exec_ret_stack.o exec_obj.o
+$(BUILDDIR):
+	mkdir -p $(BUILDDIR)
+
+$(BUILDDIR)wpp: $(BUILDDIR)wpp.o $(BUILDDIR)lexer.o $(BUILDDIR)arena.o $(BUILDDIR)exec.o $(BUILDDIR)object.o $(BUILDDIR)exec_print.o $(BUILDDIR)exec_fn.o $(BUILDDIR)exec_var.o $(BUILDDIR)exec_copy.o $(BUILDDIR)exec_scanln.o $(BUILDDIR)exec_ret_stack.o $(BUILDDIR)exec_obj.o
 	$(CC) $(LDFLAGS) -o $@ $^
 
 # objects
-wpp.o: wpp.c lexer.h exec.h
+$(BUILDDIR)wpp.o: wpp.c lexer.h exec.h
 	$(CC) -c -o $@ $(CFLAGS) $<
 
-lexer.o: lexer.c lexer.h wpp.h
+$(BUILDDIR)lexer.o: lexer.c lexer.h wpp.h
 	$(CC) -c -o $@ $(CFLAGS) $<
 
-arena.o: arena.c arena.h
+$(BUILDDIR)arena.o: arena.c arena.h
 	$(CC) -c -o $@ $(CFLAGS) $<
 
-exec.o: exec.c exec.h
+$(BUILDDIR)exec.o: exec.c exec.h
 	$(CC) -c -o $@ $(CFLAGS) $<
 
-exec_print.o: exec_print.c exec.h
+$(BUILDDIR)exec_print.o: exec_print.c exec.h
 	$(CC) -c -o $@ $(CFLAGS) $<
 
-exec_fn.o: exec_fn.c exec.h
+$(BUILDDIR)exec_fn.o: exec_fn.c exec.h
 	$(CC) -c -o $@ $(CFLAGS) $<
 
-exec_var.o: exec_var.c exec.h
+$(BUILDDIR)exec_var.o: exec_var.c exec.h
 	$(CC) -c -o $@ $(CFLAGS) $<
 
-exec_copy.o: exec_copy.c exec.h
+$(BUILDDIR)exec_copy.o: exec_copy.c exec.h
 	$(CC) -c -o $@ $(CFLAGS) $<
 
-exec_scanln.o: exec_scanln.c exec.h
+$(BUILDDIR)exec_scanln.o: exec_scanln.c exec.h
 	$(CC) -c -o $@ $(CFLAGS) $<
 
-exec_ret_stack.o: exec_ret_stack.c exec.h
+$(BUILDDIR)exec_ret_stack.o: exec_ret_stack.c exec.h
 	$(CC) -c -o $@ $(CFLAGS) $<
 
-exec_obj.o: exec_obj.c exec.h
+$(BUILDDIR)exec_obj.o: exec_obj.c exec.h
 	$(CC) -c -o $@ $(CFLAGS) $<
 
-object.o: object.c object.h
+$(BUILDDIR)object.o: object.c object.h
 	$(CC) -c -o $@ $(CFLAGS) $<
 
 # headers
