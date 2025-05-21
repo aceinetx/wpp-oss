@@ -139,7 +139,7 @@ lexer_string (Lexer *lexer)
   return tok;
 }
 
-Token
+static Token
 lexer_number (Lexer *lexer)
 {
   Token tok;
