@@ -2,6 +2,7 @@
 #include "lexer.h"
 #include <fcntl.h>
 #include <stdio.h>
+#include <string.h>
 #include <sys/mman.h>
 #include <sys/stat.h>
 #include <unistd.h>
@@ -32,10 +33,14 @@ main (int argc, char **argv)
           if (!strcmp (arg, "--help"))
             {
               usage ();
-              printf ("sizeof(wppLexer) = %u\n", sizeof (wppLexer));
-              printf ("sizeof(wppExec) = %u\n", sizeof (wppExec));
-              printf ("sizeof(wppObject) = %u\n", sizeof (wppObject));
-              printf ("sizeof(wppToken) = %u\n", sizeof (wppToken));
+              printf ("sizeof(wppLexer) = %u\n",
+                      (unsigned int)sizeof (wppLexer));
+              printf ("sizeof(wppExec) = %u\n",
+                      (unsigned int)sizeof (wppExec));
+              printf ("sizeof(wppObject) = %u\n",
+                      (unsigned int)sizeof (wppObject));
+              printf ("sizeof(wppToken) = %u\n",
+                      (unsigned int)sizeof (wppToken));
               return 0;
             }
         }
