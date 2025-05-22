@@ -12,6 +12,7 @@ bool wpp_do_call (wppExec *exec);
 bool wpp_do_var (wppExec *exec);
 bool wpp_do_cp (wppExec *exec);
 bool wpp_do_scanln (wppExec *exec);
+bool wpp_do_return (wppExec *exec);
 
 wppExec *
 wpp_exec_new (wppLexer *lexer)
@@ -23,6 +24,15 @@ wpp_exec_new (wppLexer *lexer)
   exec->objects_arena = wpp_arena_new ();
   exec->strings_arena = wpp_arena_new ();
   exec->ret_stack_top = -1;
+
+  {
+    wppObject ret;
+    ret.type = WPP_OBJ_INT;
+    ret.as._int = 0;
+
+    wpp_exec_assign (exec, "ret", ret);
+  }
+
   return exec;
 }
 
@@ -89,6 +99,7 @@ wpp_exec_run (wppExec *exec)
           DO_TOKEN (WPP_TOKEN_CALL, wpp_do_call);
           DO_TOKEN (WPP_TOKEN_CP, wpp_do_cp);
           DO_TOKEN (WPP_TOKEN_SCANLN, wpp_do_scanln);
+          DO_TOKEN (WPP_TOKEN_RETURN, wpp_do_return);
         }
 
 #undef DO_TOKEN
@@ -104,5 +115,13 @@ wpp_exec_run (wppExec *exec)
         }
 
       wpp_exec_run (exec);
+
+      {
+        wppObject *ret = wpp_exec_getvar (exec, "ret");
+        if (ret)
+          {
+            exec->exit_level = ret->as._int;
+          }
+      }
     }
 }

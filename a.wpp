@@ -1,6 +1,5 @@
 fn main;
 	var i = 69;
-	var j = i;
-	println "$j^";
+	return i;
 nf;
 

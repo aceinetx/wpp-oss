@@ -38,6 +38,8 @@ typedef struct
 
   unsigned int ret_stack[256];
   size_t ret_stack_top;
+
+  unsigned int exit_level;
 } wppExec;
 
 wppExec *wpp_exec_new (wppLexer *lexer);
