@@ -1,5 +1,11 @@
+fn f;
+	var a = 23;
+	var a + a;
+	var a + 23;
+	cp ret a;
+nf;
+
 fn main;
-	var i = 69;
-	return i;
+	call f;
 nf;
 

@@ -1,6 +1,8 @@
 #include "exec.h"
 #include <stdio.h>
 
+bool wpp_do_nf (wppExec *exec);
+
 bool
 wpp_do_return (wppExec *exec)
 {
@@ -36,5 +38,6 @@ wpp_do_return (wppExec *exec)
     }
 
   wpp_exec_assign (exec, "ret", obj);
+  wpp_do_nf (exec);
   return true;
 }
