@@ -18,7 +18,6 @@ typedef struct
     struct
     {
       unsigned int pos;
-      char *name;
     } function;
 
     int _int;

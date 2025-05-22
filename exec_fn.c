@@ -32,7 +32,6 @@ do_fn (Exec *exec)
   DO_TEST_TOKEN (lexer_next (exec->lexer), TOKEN_SEMICOLON);
 
   fn->name = name.as.str;
-  fn->as.function.name = name.as.str;
   fn->as.function.pos = exec->lexer->pos + 1;
 
   /* append the function to the function list */

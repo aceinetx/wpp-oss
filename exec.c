@@ -48,7 +48,7 @@ exec_fcall (Exec *exec, const char *name)
       Object *obj = exec->vars[i];
       if (obj->type == OBJ_FUNCTION)
         {
-          if (strcmp (obj->as.function.name, name) == 0)
+          if (strcmp (obj->name, name) == 0)
             {
               if (exec_push_ret_stack (exec, exec->lexer->pos) == PUSH_FAIL)
                 {
