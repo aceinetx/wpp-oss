@@ -234,6 +234,7 @@ wpp_lexer_next (wppLexer *lexer)
           DO_IDENTIFIR ("var", WPP_TOKEN_VAR);
           DO_IDENTIFIR ("cp", WPP_TOKEN_CP);
           DO_IDENTIFIR ("scanln", WPP_TOKEN_SCANLN);
+          DO_IDENTIFIR ("return", WPP_TOKEN_RETURN);
 #undef DO_IDENTIFIR
           if (token.type == WPP_TOKEN_IDENTIFIER)
             wpp_arena_append (&lexer->strings_arena, token.as.str);

@@ -12,7 +12,7 @@ clean:
 $(BUILDDIR):
 	mkdir -p $(BUILDDIR)
 
-$(BUILDDIR)wpp: $(BUILDDIR)wpp.o $(BUILDDIR)lexer.o $(BUILDDIR)arena.o $(BUILDDIR)exec.o $(BUILDDIR)object.o $(BUILDDIR)exec_print.o $(BUILDDIR)exec_fn.o $(BUILDDIR)exec_var.o $(BUILDDIR)exec_copy.o $(BUILDDIR)exec_scanln.o $(BUILDDIR)exec_ret_stack.o $(BUILDDIR)exec_obj.o
+$(BUILDDIR)wpp: $(BUILDDIR)wpp.o $(BUILDDIR)lexer.o $(BUILDDIR)arena.o $(BUILDDIR)exec.o $(BUILDDIR)object.o $(BUILDDIR)exec_print.o $(BUILDDIR)exec_fn.o $(BUILDDIR)exec_var.o $(BUILDDIR)exec_copy.o $(BUILDDIR)exec_scanln.o $(BUILDDIR)exec_ret_stack.o $(BUILDDIR)exec_obj.o $(BUILDDIR)exec_misc.o
 	$(CC) $(LDFLAGS) -o $@ $^
 
 # objects
@@ -47,6 +47,9 @@ $(BUILDDIR)exec_ret_stack.o: exec_ret_stack.c exec.h
 	$(CC) -c -o $@ $(CFLAGS) $<
 
 $(BUILDDIR)exec_obj.o: exec_obj.c exec.h
+	$(CC) -c -o $@ $(CFLAGS) $<
+
+$(BUILDDIR)exec_misc.o: exec_misc.c exec.h
 	$(CC) -c -o $@ $(CFLAGS) $<
 
 $(BUILDDIR)object.o: object.c object.h

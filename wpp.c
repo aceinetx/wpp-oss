@@ -14,10 +14,12 @@ main (int argc, char **argv)
 {
   wppLexer *lexer;
   wppExec *exec;
-  int fd, i;
+  int fd, i, exit_level;
   struct stat stat;
   char *code;
   char *filename = NULL;
+
+  exit_level = 0;
 
   if (argc <= 1)
     {
@@ -85,6 +87,11 @@ main (int argc, char **argv)
     if (*exec->error)
       {
         printf ("wpp: %s\n", exec->error);
+        exit_level = 1;
+      }
+    else
+      {
+        exit_level = exec->exit_level;
       }
 
     wpp_lexer_free (lexer);
@@ -94,7 +101,7 @@ main (int argc, char **argv)
   /* close & free up the file buffer and the file itself */
   munmap (code, stat.st_size);
   close (fd);
-  return 0;
+  return exit_level;
 }
 
 static void
