@@ -16,6 +16,10 @@ wpp_do_return (wppExec *exec)
       obj.type = WPP_OBJ_INT;
       obj.as._int = arg.as.number;
       break;
+    case WPP_TOKEN_FLOAT:
+      obj.type = WPP_OBJ_FLOAT;
+      obj.as._float = arg.as.fnumber;
+      break;
     case WPP_TOKEN_IDENTIFIER:
       var = wpp_exec_getvar (exec, arg.as.str);
       if (!var)

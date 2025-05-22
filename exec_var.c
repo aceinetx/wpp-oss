@@ -72,6 +72,11 @@ wpp_do_var (wppExec *exec)
       object.as._int = value.as.number;
       object.name = name.as.str;
       break;
+    case WPP_TOKEN_FLOAT:
+      object.type = WPP_OBJ_FLOAT;
+      object.as._float = value.as.fnumber;
+      object.name = name.as.str;
+      break;
     case WPP_TOKEN_IDENTIFIER:
       var = wpp_exec_getvar (exec, value.as.str);
       if (!var)

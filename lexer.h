@@ -10,6 +10,7 @@ enum wppTokenType
   WPP_TOKEN_END,
 
   WPP_TOKEN_INT,
+  WPP_TOKEN_FLOAT,
 
   WPP_TOKEN_IDENTIFIER,
   WPP_TOKEN_STRING,
@@ -44,6 +45,7 @@ typedef struct
   union
   {
     int number;
+    float fnumber;
     char *str;
   } as;
 

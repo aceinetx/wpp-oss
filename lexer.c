@@ -4,6 +4,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+float strtof (const char *str, char **endptr);
+
 static bool
 is_letter (char c)
 {
@@ -153,9 +155,11 @@ wpp_lexer_number (wppLexer *lexer)
 {
   wppToken tok;
   bool is_hex;
+  bool is_float = false;
   size_t length;
   char c;
   int value;
+  int start_pos = lexer->pos;
 
   tok = wpp_token_new ();
   tok.type = WPP_TOKEN_INT;
@@ -177,6 +181,11 @@ wpp_lexer_number (wppLexer *lexer)
               is_hex = true;
               lexer->pos++;
               continue;
+            }
+          else if (c == '.')
+            {
+              is_float = true;
+              break;
             }
           else
             {
@@ -202,6 +211,29 @@ wpp_lexer_number (wppLexer *lexer)
           tok.as.number = (tok.as.number * 10) + (c - '0');
         }
       lexer->pos++;
+    }
+
+  if (is_float)
+    {
+      int float_start, float_end, float_len;
+      char float_buf[64];
+
+      /* parse the float from the original string */
+      float_start = start_pos;
+      float_end = lexer->pos;
+      /* find the end of the float literal */
+      while (lexer->pos < length
+             && (is_digit (lexer->code[lexer->pos])
+                 || lexer->code[lexer->pos] == '.'))
+        lexer->pos++;
+      float_end = lexer->pos;
+      float_len = float_end - float_start;
+      if (float_len >= (int)sizeof (float_buf))
+        float_len = sizeof (float_buf) - 1;
+      memcpy (float_buf, &lexer->code[float_start], float_len);
+      float_buf[float_len] = '\0';
+      tok.type = WPP_TOKEN_FLOAT;
+      tok.as.fnumber = strtof (float_buf, NULL);
     }
 
   return tok;
