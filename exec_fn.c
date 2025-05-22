@@ -5,9 +5,9 @@
 #include <string.h>
 
 bool
-do_nf (Exec *exec)
+wpp_do_nf (wppExec *exec)
 {
-  unsigned int pos = exec_pop_ret_stack (exec);
+  unsigned int pos = wpp_exec_pop_ret_stack (exec);
   if (*exec->error)
     {
       /* we are probably exiting from the main function */
@@ -21,48 +21,48 @@ do_nf (Exec *exec)
 }
 
 bool
-do_fn (Exec *exec)
+wpp_do_fn (wppExec *exec)
 {
-  Object *fn = malloc (sizeof (Object));
-  Token name, token;
-  fn->type = OBJ_FUNCTION;
+  wppObject *fn = malloc (sizeof (wppObject));
+  wppToken name, token;
+  fn->type = WPP_OBJ_FUNCTION;
 
-  name = lexer_next (exec->lexer);
-  DO_TEST_TOKEN (name, TOKEN_IDENTIFIER);
-  DO_TEST_TOKEN (lexer_next (exec->lexer), TOKEN_SEMICOLON);
+  name = wpp_lexer_next (exec->lexer);
+  DO_TEST_TOKEN (name, WPP_TOKEN_IDENTIFIER);
+  DO_TEST_TOKEN (wpp_lexer_next (exec->lexer), WPP_TOKEN_SEMICOLON);
 
   fn->name = name.as.str;
   fn->as.function.pos = exec->lexer->pos + 1;
 
   /* append the function to the function list */
-  exec->vars_capacity += sizeof (Object *);
+  exec->vars_capacity += sizeof (wppObject *);
   exec->vars = realloc (exec->vars, exec->vars_capacity);
   exec->vars[exec->vars_len] = fn;
   exec->vars_len++;
 
-  /* skip to TOKEN_NF */
+  /* skip to WPP_TOKEN_NF */
   do
     {
-      token = lexer_next (exec->lexer);
+      token = wpp_lexer_next (exec->lexer);
     }
-  while (token.type != TOKEN_NF);
-  DO_TEST_TOKEN (lexer_next (exec->lexer), TOKEN_SEMICOLON);
+  while (token.type != WPP_TOKEN_NF);
+  DO_TEST_TOKEN (wpp_lexer_next (exec->lexer), WPP_TOKEN_SEMICOLON);
 
-  arena_append (&exec->objects_arena, fn);
+  wpp_arena_append (&exec->objects_arena, fn);
 
   return true;
 }
 
 bool
-do_call (Exec *exec)
+wpp_do_call (wppExec *exec)
 {
-  Token name;
+  wppToken name;
 
-  name = lexer_next (exec->lexer);
-  DO_TEST_TOKEN (name, TOKEN_IDENTIFIER);
-  DO_TEST_TOKEN (lexer_next (exec->lexer), TOKEN_SEMICOLON);
+  name = wpp_lexer_next (exec->lexer);
+  DO_TEST_TOKEN (name, WPP_TOKEN_IDENTIFIER);
+  DO_TEST_TOKEN (wpp_lexer_next (exec->lexer), WPP_TOKEN_SEMICOLON);
 
-  if (exec_fcall (exec, name.as.str) == FCALL_FAIL)
+  if (wpp_exec_fcall (exec, name.as.str) == FCALL_FAIL)
     return false;
   return true;
 }

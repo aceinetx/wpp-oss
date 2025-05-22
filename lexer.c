@@ -22,21 +22,21 @@ is_digit (char c)
   return (c >= '0' && c <= '9');
 }
 
-static Token
-token_new (void)
+static wppToken
+wpp_token_new (void)
 {
-  Token token;
+  wppToken token;
   token.line = 0;
   token.as.str = NULL;
-  token.type = TOKEN_NULL;
+  token.type = WPP_TOKEN_NULL;
   return token;
 }
 
-Lexer *
-lexer_new (char *code)
+wppLexer *
+wpp_lexer_new (char *code)
 {
-  Lexer *lexer = malloc (sizeof (Lexer));
-  lexer->strings_arena = arena_new ();
+  wppLexer *lexer = malloc (sizeof (wppLexer));
+  lexer->strings_arena = wpp_arena_new ();
   lexer->code = code;
   lexer->line = 1;
   lexer->pos = 0;
@@ -44,21 +44,21 @@ lexer_new (char *code)
 }
 
 void
-lexer_free (Lexer *lexer)
+wpp_lexer_free (wppLexer *lexer)
 {
-  arena_free (&lexer->strings_arena);
+  wpp_arena_free (&lexer->strings_arena);
   free (lexer);
 }
 
 /* this doesn't append to strings arena: you'll have to do it manually */
-static Token
-lexer_identifier (Lexer *lexer)
+static wppToken
+wpp_lexer_identifier (wppLexer *lexer)
 {
-  Token tok;
+  wppToken tok;
   size_t len;
 
-  tok = token_new ();
-  tok.type = TOKEN_IDENTIFIER;
+  tok = wpp_token_new ();
+  tok.type = WPP_TOKEN_IDENTIFIER;
   tok.line = lexer->line;
   tok.as.str = malloc (1);
 
@@ -83,15 +83,15 @@ lexer_identifier (Lexer *lexer)
   return tok;
 }
 
-static Token
-lexer_string (Lexer *lexer)
+static wppToken
+wpp_lexer_string (wppLexer *lexer)
 {
-  Token tok;
+  wppToken tok;
   size_t len;
   bool definition;
 
-  tok = token_new ();
-  tok.type = TOKEN_STRING;
+  tok = wpp_token_new ();
+  tok.type = WPP_TOKEN_STRING;
   tok.line = lexer->line;
   tok.as.str = malloc (1);
 
@@ -125,7 +125,7 @@ lexer_string (Lexer *lexer)
       lexer->pos++;
     }
 
-  arena_append (&lexer->strings_arena, tok.as.str);
+  wpp_arena_append (&lexer->strings_arena, tok.as.str);
 
   return tok;
 }
@@ -148,17 +148,17 @@ hex_char_to_value (char c)
   return -1; /* invalid character */
 }
 
-static Token
-lexer_number (Lexer *lexer)
+static wppToken
+wpp_lexer_number (wppLexer *lexer)
 {
-  Token tok;
+  wppToken tok;
   bool is_hex;
   size_t length;
   char c;
   int value;
 
-  tok = token_new ();
-  tok.type = TOKEN_INT;
+  tok = wpp_token_new ();
+  tok.type = WPP_TOKEN_INT;
   tok.line = lexer->line;
 
   is_hex = false;
@@ -207,75 +207,75 @@ lexer_number (Lexer *lexer)
   return tok;
 }
 
-Token
-lexer_next (Lexer *lexer)
+wppToken
+wpp_lexer_next (wppLexer *lexer)
 {
-  Token token = token_new ();
+  wppToken token = wpp_token_new ();
 
   while (lexer->pos < strlen (lexer->code))
     {
       char c = lexer->code[lexer->pos];
-      token = token_new ();
+      token = wpp_token_new ();
 
       if (c == '\n')
         lexer->line++;
 
       if (is_letter (c))
         {
-          token = lexer_identifier (lexer);
+          token = wpp_lexer_identifier (lexer);
 #define DO_IDENTIFIR(s, v)                                                    \
   if (strcmp (token.as.str, s) == 0)                                          \
     token.type = v;
-          DO_IDENTIFIR ("fn", TOKEN_FN);
-          DO_IDENTIFIR ("nf", TOKEN_NF);
-          DO_IDENTIFIR ("print", TOKEN_PRINT);
-          DO_IDENTIFIR ("println", TOKEN_PRINTLN);
-          DO_IDENTIFIR ("call", TOKEN_CALL);
-          DO_IDENTIFIR ("var", TOKEN_VAR);
-          DO_IDENTIFIR ("cp", TOKEN_CP);
-          DO_IDENTIFIR ("scanln", TOKEN_SCANLN);
+          DO_IDENTIFIR ("fn", WPP_TOKEN_FN);
+          DO_IDENTIFIR ("nf", WPP_TOKEN_NF);
+          DO_IDENTIFIR ("print", WPP_TOKEN_PRINT);
+          DO_IDENTIFIR ("println", WPP_TOKEN_PRINTLN);
+          DO_IDENTIFIR ("call", WPP_TOKEN_CALL);
+          DO_IDENTIFIR ("var", WPP_TOKEN_VAR);
+          DO_IDENTIFIR ("cp", WPP_TOKEN_CP);
+          DO_IDENTIFIR ("scanln", WPP_TOKEN_SCANLN);
 #undef DO_IDENTIFIR
-          if (token.type == TOKEN_IDENTIFIER)
-            arena_append (&lexer->strings_arena, token.as.str);
+          if (token.type == WPP_TOKEN_IDENTIFIER)
+            wpp_arena_append (&lexer->strings_arena, token.as.str);
           else
             free (token.as.str);
         }
       else if (is_digit (c))
         {
-          token = lexer_number (lexer);
+          token = wpp_lexer_number (lexer);
         }
       else if (c == '"')
         {
-          token = lexer_string (lexer);
+          token = wpp_lexer_string (lexer);
         }
       else if (c == ';')
         {
-          token.type = TOKEN_SEMICOLON;
+          token.type = WPP_TOKEN_SEMICOLON;
           lexer->pos++;
         }
       else if (c == '=')
         {
-          token.type = TOKEN_EQ;
+          token.type = WPP_TOKEN_EQ;
           lexer->pos++;
         }
       else if (c == '+')
         {
-          token.type = TOKEN_ADD;
+          token.type = WPP_TOKEN_ADD;
           lexer->pos++;
         }
       else if (c == '-')
         {
-          token.type = TOKEN_SUB;
+          token.type = WPP_TOKEN_SUB;
           lexer->pos++;
         }
       else if (c == '*')
         {
-          token.type = TOKEN_MUL;
+          token.type = WPP_TOKEN_MUL;
           lexer->pos++;
         }
       else if (c == '/')
         {
-          token.type = TOKEN_DIV;
+          token.type = WPP_TOKEN_DIV;
           lexer->pos++;
         }
       else if (c == '?')
@@ -287,7 +287,7 @@ lexer_next (Lexer *lexer)
           lexer->pos++;
         }
 
-      if (token.type != TOKEN_NULL)
+      if (token.type != WPP_TOKEN_NULL)
         {
           return token;
         }
@@ -295,7 +295,7 @@ lexer_next (Lexer *lexer)
       lexer->pos++;
     }
 
-  token.type = TOKEN_END;
+  token.type = WPP_TOKEN_END;
   token.line = lexer->line;
   return token;
 }

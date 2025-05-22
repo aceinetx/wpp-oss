@@ -5,26 +5,26 @@
 #include <string.h>
 
 bool
-do_scanln (Exec *exec)
+wpp_do_scanln (wppExec *exec)
 {
-  Token dest;
-  Object src;
+  wppToken dest;
+  wppObject src;
 
-  dest = lexer_next (exec->lexer);
-  DO_TEST_TOKEN (dest, TOKEN_IDENTIFIER);
-  DO_TEST_TOKEN (lexer_next (exec->lexer), TOKEN_SEMICOLON);
+  dest = wpp_lexer_next (exec->lexer);
+  DO_TEST_TOKEN (dest, WPP_TOKEN_IDENTIFIER);
+  DO_TEST_TOKEN (wpp_lexer_next (exec->lexer), WPP_TOKEN_SEMICOLON);
 
   {
-    char *buffer = arena_alloc (&exec->strings_arena, 256);
+    char *buffer = wpp_arena_alloc (&exec->strings_arena, 256);
     fgets (buffer, 255, stdin);
 
     buffer[strcspn (buffer, "\n")] = 0;
 
-    src.type = OBJ_STRING;
+    src.type = WPP_OBJ_STRING;
     src.as.string = buffer;
   }
 
-  exec_assign (exec, dest.as.str, src);
+  wpp_exec_assign (exec, dest.as.str, src);
 
   return true;
 }

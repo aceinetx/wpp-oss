@@ -10,11 +10,11 @@ typedef struct
   uint32_t length;
 } Arena;
 
-Arena arena_new (void);
+Arena wpp_arena_new (void);
 
-void *arena_alloc (Arena *arena, uint32_t size);
-void arena_append (Arena *arena, void *ptr);
+void *wpp_arena_alloc (Arena *arena, uint32_t size);
+void wpp_arena_append (Arena *arena, void *ptr);
 
-void arena_free (Arena *arena);
+void wpp_arena_free (Arena *arena);
 
 #endif

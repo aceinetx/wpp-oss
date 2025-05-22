@@ -3,25 +3,25 @@
 #include <stdio.h>
 
 bool
-do_cp (Exec *exec)
+wpp_do_cp (wppExec *exec)
 {
-  Token dest, src;
-  Object *osrc;
+  wppToken dest, src;
+  wppObject *osrc;
 
-  dest = lexer_next (exec->lexer);
-  src = lexer_next (exec->lexer);
-  DO_TEST_TOKEN (dest, TOKEN_IDENTIFIER);
-  DO_TEST_TOKEN (src, TOKEN_IDENTIFIER);
-  DO_TEST_TOKEN (lexer_next (exec->lexer), TOKEN_SEMICOLON);
+  dest = wpp_lexer_next (exec->lexer);
+  src = wpp_lexer_next (exec->lexer);
+  DO_TEST_TOKEN (dest, WPP_TOKEN_IDENTIFIER);
+  DO_TEST_TOKEN (src, WPP_TOKEN_IDENTIFIER);
+  DO_TEST_TOKEN (wpp_lexer_next (exec->lexer), WPP_TOKEN_SEMICOLON);
 
-  osrc = exec_getvar (exec, src.as.str);
+  osrc = wpp_exec_getvar (exec, src.as.str);
   if (!osrc)
     {
       printf ("wpp: unknown var %s\n", src.as.str);
       return false;
     }
 
-  exec_assign (exec, dest.as.str, *osrc);
+  wpp_exec_assign (exec, dest.as.str, *osrc);
 
   return true;
 }

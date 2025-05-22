@@ -27,35 +27,35 @@ enum
 typedef struct
 {
   char error[256];
-  Object **vars;
+  wppObject **vars;
   unsigned int vars_len;
   unsigned int vars_capacity;
 
   Arena objects_arena;
   Arena strings_arena;
 
-  Lexer *lexer;
+  wppLexer *lexer;
 
   unsigned int ret_stack[256];
   size_t ret_stack_top;
-} Exec;
+} wppExec;
 
-Exec *exec_new (Lexer *lexer);
-void exec_free (Exec *exec);
+wppExec *wpp_exec_new (wppLexer *lexer);
+void wpp_exec_free (wppExec *exec);
 
-int exec_fcall (Exec *exec, const char *name);
-Object *exec_getvar (Exec *exec, const char *name);
-Object *exec_assign (Exec *exec, const char *name, Object object);
+int wpp_exec_fcall (wppExec *exec, const char *name);
+wppObject *wpp_exec_getvar (wppExec *exec, const char *name);
+wppObject *wpp_exec_assign (wppExec *exec, const char *name, wppObject object);
 
-int exec_push_ret_stack (Exec *exec, unsigned int value);
-unsigned int exec_pop_ret_stack (Exec *exec);
+int wpp_exec_push_ret_stack (wppExec *exec, unsigned int value);
+unsigned int wpp_exec_pop_ret_stack (wppExec *exec);
 
-void exec_run (Exec *exec);
+void wpp_exec_run (wppExec *exec);
 
-bool exec_obj_eq (Exec *exec, Object *obj, Object *other);
-bool exec_obj_add (Exec *exec, Object *obj, Object *other);
-bool exec_obj_sub (Exec *exec, Object *obj, Object *other);
-bool exec_obj_mul (Exec *exec, Object *obj, Object *other);
-bool exec_obj_div (Exec *exec, Object *obj, Object *other);
+bool wpp_exec_obj_eq (wppExec *exec, wppObject *obj, wppObject *other);
+bool wpp_exec_obj_add (wppExec *exec, wppObject *obj, wppObject *other);
+bool wpp_exec_obj_sub (wppExec *exec, wppObject *obj, wppObject *other);
+bool wpp_exec_obj_mul (wppExec *exec, wppObject *obj, wppObject *other);
+bool wpp_exec_obj_div (wppExec *exec, wppObject *obj, wppObject *other);
 
 #endif

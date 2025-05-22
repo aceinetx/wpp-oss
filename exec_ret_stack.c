@@ -2,7 +2,7 @@
 #include <stdio.h>
 
 int
-exec_push_ret_stack (Exec *exec, unsigned int value)
+wpp_exec_push_ret_stack (wppExec *exec, unsigned int value)
 {
   if (exec->ret_stack_top + 1
       >= sizeof (exec->ret_stack) / sizeof (unsigned int))
@@ -15,7 +15,7 @@ exec_push_ret_stack (Exec *exec, unsigned int value)
 }
 
 unsigned int
-exec_pop_ret_stack (Exec *exec)
+wpp_exec_pop_ret_stack (wppExec *exec)
 {
   if (exec->ret_stack_top == 0)
     {

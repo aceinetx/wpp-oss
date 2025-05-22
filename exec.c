@@ -4,53 +4,54 @@
 #include <stdlib.h>
 #include <string.h>
 
-bool do_print (Exec *exec);
-bool do_println (Exec *exec);
-bool do_fn (Exec *exec);
-bool do_nf (Exec *exec);
-bool do_call (Exec *exec);
-bool do_var (Exec *exec);
-bool do_cp (Exec *exec);
-bool do_scanln (Exec *exec);
+bool wpp_do_print (wppExec *exec);
+bool wpp_do_println (wppExec *exec);
+bool wpp_do_fn (wppExec *exec);
+bool wpp_do_nf (wppExec *exec);
+bool wpp_do_call (wppExec *exec);
+bool wpp_do_var (wppExec *exec);
+bool wpp_do_cp (wppExec *exec);
+bool wpp_do_scanln (wppExec *exec);
 
-Exec *
-exec_new (Lexer *lexer)
+wppExec *
+wpp_exec_new (wppLexer *lexer)
 {
-  Exec *exec = malloc (sizeof (Exec));
-  memset (exec, 0, sizeof (Exec));
+  wppExec *exec = malloc (sizeof (wppExec));
+  memset (exec, 0, sizeof (wppExec));
 
   exec->lexer = lexer;
-  exec->objects_arena = arena_new ();
-  exec->strings_arena = arena_new ();
+  exec->objects_arena = wpp_arena_new ();
+  exec->strings_arena = wpp_arena_new ();
   exec->ret_stack_top = -1;
   return exec;
 }
 
 void
-exec_free (Exec *exec)
+wpp_exec_free (wppExec *exec)
 {
   if (exec->vars)
     {
       free (exec->vars);
     }
 
-  arena_free (&exec->objects_arena);
-  arena_free (&exec->strings_arena);
+  wpp_arena_free (&exec->objects_arena);
+  wpp_arena_free (&exec->strings_arena);
   free (exec);
 }
 
 int
-exec_fcall (Exec *exec, const char *name)
+wpp_exec_fcall (wppExec *exec, const char *name)
 {
   unsigned int i;
   for (i = 0; i < exec->vars_len; i++)
     {
-      Object *obj = exec->vars[i];
-      if (obj->type == OBJ_FUNCTION)
+      wppObject *obj = exec->vars[i];
+      if (obj->type == WPP_OBJ_FUNCTION)
         {
           if (strcmp (obj->name, name) == 0)
             {
-              if (exec_push_ret_stack (exec, exec->lexer->pos) == PUSH_FAIL)
+              if (wpp_exec_push_ret_stack (exec, exec->lexer->pos)
+                  == PUSH_FAIL)
                 {
                   return FCALL_FAIL;
                 }
@@ -63,45 +64,45 @@ exec_fcall (Exec *exec, const char *name)
 }
 
 void
-exec_run (Exec *exec)
+wpp_exec_run (wppExec *exec)
 {
-  Token token;
+  wppToken token;
   bool main_iteration = false;
   if (exec->lexer->pos > 0)
     main_iteration = true;
 
-  token = lexer_next (exec->lexer);
-  while (token.type != TOKEN_END)
+  token = wpp_lexer_next (exec->lexer);
+  while (token.type != WPP_TOKEN_END)
     {
 #define DO_TOKEN(t, f)                                                        \
   if (token.type == t)                                                        \
     if (!f (exec))                                                            \
       return;
 
-      DO_TOKEN (TOKEN_FN, do_fn);
-      DO_TOKEN (TOKEN_NF, do_nf);
-      DO_TOKEN (TOKEN_VAR, do_var);
+      DO_TOKEN (WPP_TOKEN_FN, wpp_do_fn);
+      DO_TOKEN (WPP_TOKEN_NF, wpp_do_nf);
+      DO_TOKEN (WPP_TOKEN_VAR, wpp_do_var);
       if (main_iteration)
         {
-          DO_TOKEN (TOKEN_PRINTLN, do_println);
-          DO_TOKEN (TOKEN_PRINT, do_print);
-          DO_TOKEN (TOKEN_CALL, do_call);
-          DO_TOKEN (TOKEN_CP, do_cp);
-          DO_TOKEN (TOKEN_SCANLN, do_scanln);
+          DO_TOKEN (WPP_TOKEN_PRINTLN, wpp_do_println);
+          DO_TOKEN (WPP_TOKEN_PRINT, wpp_do_print);
+          DO_TOKEN (WPP_TOKEN_CALL, wpp_do_call);
+          DO_TOKEN (WPP_TOKEN_CP, wpp_do_cp);
+          DO_TOKEN (WPP_TOKEN_SCANLN, wpp_do_scanln);
         }
 
 #undef DO_TOKEN
-      token = lexer_next (exec->lexer);
+      token = wpp_lexer_next (exec->lexer);
     }
 
   if (!main_iteration)
     {
-      if (exec_fcall (exec, "main") == FCALL_FAIL)
+      if (wpp_exec_fcall (exec, "main") == FCALL_FAIL)
         {
-          sprintf (exec->error, "exec_fcall failed: no main function");
+          sprintf (exec->error, "wpp_exec_fcall failed: no main function");
           return;
         }
 
-      exec_run (exec);
+      wpp_exec_run (exec);
     }
 }

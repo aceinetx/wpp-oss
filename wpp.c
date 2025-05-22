@@ -11,8 +11,8 @@ static void usage (void);
 int
 main (int argc, char **argv)
 {
-  Lexer *lexer;
-  Exec *exec;
+  wppLexer *lexer;
+  wppExec *exec;
   int fd, i;
   struct stat stat;
   char *code;
@@ -32,10 +32,10 @@ main (int argc, char **argv)
           if (!strcmp (arg, "--help"))
             {
               usage ();
-              printf ("sizeof(Lexer) = %u\n", sizeof (Lexer));
-              printf ("sizeof(Exec) = %u\n", sizeof (Exec));
-              printf ("sizeof(Object) = %u\n", sizeof (Object));
-              printf ("sizeof(Token) = %u\n", sizeof (Token));
+              printf ("sizeof(wppLexer) = %u\n", sizeof (wppLexer));
+              printf ("sizeof(wppExec) = %u\n", sizeof (wppExec));
+              printf ("sizeof(wppObject) = %u\n", sizeof (wppObject));
+              printf ("sizeof(wppToken) = %u\n", sizeof (wppToken));
               return 0;
             }
         }
@@ -73,17 +73,17 @@ main (int argc, char **argv)
   code = mmap (0, stat.st_size, PROT_READ | PROT_WRITE, MAP_PRIVATE, fd, 0);
 
   {
-    lexer = lexer_new (code);
-    exec = exec_new (lexer);
+    lexer = wpp_lexer_new (code);
+    exec = wpp_exec_new (lexer);
 
-    exec_run (exec);
+    wpp_exec_run (exec);
     if (*exec->error)
       {
         printf ("wpp: %s\n", exec->error);
       }
 
-    lexer_free (lexer);
-    exec_free (exec);
+    wpp_lexer_free (lexer);
+    wpp_exec_free (exec);
   }
 
   /* close & free up the file buffer and the file itself */
