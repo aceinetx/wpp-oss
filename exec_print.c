@@ -5,18 +5,18 @@
 #include <string.h>
 
 bool
-do_print (Exec *exec)
+wpp_do_print (wppExec *exec)
 {
-  Token string;
+  wppToken string;
   char *c;
   char *varname;
   char *varname_c;
 
   varname = NULL;
 
-  string = lexer_next (exec->lexer);
-  DO_TEST_TOKEN (string, TOKEN_STRING);
-  DO_TEST_TOKEN (lexer_next (exec->lexer), TOKEN_SEMICOLON);
+  string = wpp_lexer_next (exec->lexer);
+  DO_TEST_TOKEN (string, WPP_TOKEN_STRING);
+  DO_TEST_TOKEN (wpp_lexer_next (exec->lexer), WPP_TOKEN_SEMICOLON);
 
   /* do we even need to allocate varname? */
   c = string.as.str;
@@ -35,7 +35,7 @@ do_print (Exec *exec)
     {
       if (*c == '$')
         { /* print variable */
-          Object *var;
+          wppObject *var;
           c++;
 
           varname_c = varname;
@@ -47,21 +47,21 @@ do_print (Exec *exec)
               c++;
             }
 
-          var = exec_getvar (exec, varname);
+          var = wpp_exec_getvar (exec, varname);
           if (var)
             {
               switch (var->type)
                 {
-                case OBJ_INT:
+                case WPP_OBJ_INT:
                   printf ("%d", var->as._int);
                   break;
-                case OBJ_FLOAT:
+                case WPP_OBJ_FLOAT:
                   printf ("%f", var->as._float);
                   break;
-                case OBJ_STRING:
+                case WPP_OBJ_STRING:
                   printf ("%s", var->as.string);
                   break;
-                case OBJ_FUNCTION:
+                case WPP_OBJ_FUNCTION:
                   printf ("<function %s at %p>", varname, (void *)var);
                   break;
                 default:
@@ -89,9 +89,9 @@ do_print (Exec *exec)
 }
 
 bool
-do_println (Exec *exec)
+wpp_do_println (wppExec *exec)
 {
-  do_print (exec);
+  wpp_do_print (exec);
 
   putchar ('\n');
   return true;

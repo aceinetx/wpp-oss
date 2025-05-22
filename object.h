@@ -3,10 +3,10 @@
 
 enum
 {
-  OBJ_INT,
-  OBJ_FLOAT,
-  OBJ_STRING,
-  OBJ_FUNCTION
+  WPP_OBJ_INT,
+  WPP_OBJ_FLOAT,
+  WPP_OBJ_STRING,
+  WPP_OBJ_FUNCTION
 };
 
 typedef struct
@@ -26,6 +26,6 @@ typedef struct
   } as;
 
   char *name;
-} Object;
+} wppObject;
 
 #endif

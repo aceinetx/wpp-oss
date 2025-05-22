@@ -4,41 +4,41 @@
 #include "arena.h"
 #include <stdint.h>
 
-enum TokenType
+enum wppTokenType
 {
-  TOKEN_NULL = 0,
-  TOKEN_END,
+  WPP_TOKEN_NULL = 0,
+  WPP_TOKEN_END,
 
-  TOKEN_INT,
+  WPP_TOKEN_INT,
 
-  TOKEN_IDENTIFIER,
-  TOKEN_STRING,
+  WPP_TOKEN_IDENTIFIER,
+  WPP_TOKEN_STRING,
 
-  TOKEN_FN,
-  TOKEN_NF,
+  WPP_TOKEN_FN,
+  WPP_TOKEN_NF,
 
-  TOKEN_PRINT,
-  TOKEN_PRINTLN,
-  TOKEN_SCANLN,
+  WPP_TOKEN_PRINT,
+  WPP_TOKEN_PRINTLN,
+  WPP_TOKEN_SCANLN,
 
-  TOKEN_CALL,
+  WPP_TOKEN_CALL,
 
-  TOKEN_VAR,
+  WPP_TOKEN_VAR,
 
-  TOKEN_EQ,
-  TOKEN_ADD,
-  TOKEN_SUB,
-  TOKEN_MUL,
-  TOKEN_DIV,
+  WPP_TOKEN_EQ,
+  WPP_TOKEN_ADD,
+  WPP_TOKEN_SUB,
+  WPP_TOKEN_MUL,
+  WPP_TOKEN_DIV,
 
-  TOKEN_CP,
+  WPP_TOKEN_CP,
 
-  TOKEN_SEMICOLON
+  WPP_TOKEN_SEMICOLON
 };
 
 typedef struct
 {
-  enum TokenType type;
+  enum wppTokenType type;
 
   union
   {
@@ -47,7 +47,7 @@ typedef struct
   } as;
 
   unsigned int line;
-} Token;
+} wppToken;
 
 typedef struct
 {
@@ -57,11 +57,11 @@ typedef struct
   Arena strings_arena;
 
   unsigned int line;
-} Lexer;
+} wppLexer;
 
-Lexer *lexer_new (char *code);
-void lexer_free (Lexer *lexer);
+wppLexer *wpp_lexer_new (char *code);
+void wpp_lexer_free (wppLexer *lexer);
 
-Token lexer_next (Lexer *lexer);
+wppToken wpp_lexer_next (wppLexer *lexer);
 
 #endif

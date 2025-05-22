@@ -6,30 +6,30 @@
 
 char *strdup (const char *);
 
-Object *
-exec_getvar (Exec *exec, const char *name)
+wppObject *
+wpp_exec_getvar (wppExec *exec, const char *name)
 {
   unsigned int i;
   for (i = 0; i < exec->vars_len; i++)
     {
-      Object *obj = exec->vars[i];
+      wppObject *obj = exec->vars[i];
       if (strcmp (obj->name, name) == 0)
         return obj;
     }
   return NULL;
 }
 
-Object *
-exec_assign (Exec *exec, const char *name, Object object)
+wppObject *
+wpp_exec_assign (wppExec *exec, const char *name, wppObject object)
 {
   unsigned int i;
   for (i = 0; i < exec->vars_len; i++)
     {
-      Object *obj = exec->vars[i];
+      wppObject *obj = exec->vars[i];
       if (strcmp (obj->name, name) == 0)
         {
           char *old_name = obj->name;
-          memcpy (obj, &object, sizeof (Object));
+          memcpy (obj, &object, sizeof (wppObject));
           obj->name = old_name;
           return obj;
         }
@@ -37,14 +37,14 @@ exec_assign (Exec *exec, const char *name, Object object)
 
   /* didn't find a variable: create it */
   {
-    Object *obj_alloc = malloc (sizeof (Object));
-    memcpy (obj_alloc, &object, sizeof (Object));
+    wppObject *obj_alloc = malloc (sizeof (wppObject));
+    memcpy (obj_alloc, &object, sizeof (wppObject));
     obj_alloc->name = strdup (name);
 
-    arena_append (&exec->strings_arena, obj_alloc->name);
-    arena_append (&exec->objects_arena, obj_alloc);
+    wpp_arena_append (&exec->strings_arena, obj_alloc->name);
+    wpp_arena_append (&exec->objects_arena, obj_alloc);
 
-    exec->vars_capacity += sizeof (Object *);
+    exec->vars_capacity += sizeof (wppObject *);
     exec->vars = realloc (exec->vars, exec->vars_capacity);
     exec->vars[exec->vars_len] = obj_alloc;
     exec->vars_len++;
@@ -53,50 +53,50 @@ exec_assign (Exec *exec, const char *name, Object object)
 }
 
 bool
-do_var (Exec *exec)
+wpp_do_var (wppExec *exec)
 {
-  Object object;
-  Object *var;
-  Token name, eq, value;
+  wppObject object;
+  wppObject *var;
+  wppToken name, eq, value;
 
-  name = lexer_next (exec->lexer);
-  eq = lexer_next (exec->lexer);
-  value = lexer_next (exec->lexer);
-  DO_TEST_TOKEN (name, TOKEN_IDENTIFIER);
-  DO_TEST_TOKEN (value, TOKEN_INT);
-  DO_TEST_TOKEN (lexer_next (exec->lexer), TOKEN_SEMICOLON);
+  name = wpp_lexer_next (exec->lexer);
+  eq = wpp_lexer_next (exec->lexer);
+  value = wpp_lexer_next (exec->lexer);
+  DO_TEST_TOKEN (name, WPP_TOKEN_IDENTIFIER);
+  DO_TEST_TOKEN (value, WPP_TOKEN_INT);
+  DO_TEST_TOKEN (wpp_lexer_next (exec->lexer), WPP_TOKEN_SEMICOLON);
 
-  object.type = OBJ_INT;
+  object.type = WPP_OBJ_INT;
   object.as._int = value.as.number;
   object.name = name.as.str;
 
-  var = exec_getvar (exec, name.as.str);
+  var = wpp_exec_getvar (exec, name.as.str);
   if (!var)
     {
-      exec_assign (exec, name.as.str, object);
+      wpp_exec_assign (exec, name.as.str, object);
     }
 
   switch (eq.type)
     {
-    case TOKEN_EQ:
+    case WPP_TOKEN_EQ:
       if (var)
-        if (!exec_obj_eq (exec, var, &object))
+        if (!wpp_exec_obj_eq (exec, var, &object))
           return false;
       break;
-    case TOKEN_ADD:
-      if (!exec_obj_add (exec, var, &object))
+    case WPP_TOKEN_ADD:
+      if (!wpp_exec_obj_add (exec, var, &object))
         return false;
       break;
-    case TOKEN_SUB:
-      if (!exec_obj_sub (exec, var, &object))
+    case WPP_TOKEN_SUB:
+      if (!wpp_exec_obj_sub (exec, var, &object))
         return false;
       break;
-    case TOKEN_MUL:
-      if (!exec_obj_mul (exec, var, &object))
+    case WPP_TOKEN_MUL:
+      if (!wpp_exec_obj_mul (exec, var, &object))
         return false;
       break;
-    case TOKEN_DIV:
-      if (!exec_obj_div (exec, var, &object))
+    case WPP_TOKEN_DIV:
+      if (!wpp_exec_obj_div (exec, var, &object))
         return false;
       break;
     default:

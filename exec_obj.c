@@ -3,30 +3,30 @@
 #include <string.h>
 
 bool
-exec_obj_eq (Exec *exec, Object *obj, Object *other)
+wpp_exec_obj_eq (wppExec *exec, wppObject *obj, wppObject *other)
 {
   (void)exec;
-  memcpy (obj, other, sizeof (Object));
+  memcpy (obj, other, sizeof (wppObject));
   return true;
 }
 
 bool
-exec_obj_add (Exec *exec, Object *obj, Object *other)
+wpp_exec_obj_add (wppExec *exec, wppObject *obj, wppObject *other)
 {
-  if (obj->type == OBJ_INT)
+  if (obj->type == WPP_OBJ_INT)
     {
-      if (other->type == OBJ_INT)
+      if (other->type == WPP_OBJ_INT)
         obj->as._int += other->as._int;
-      else if (other->type == OBJ_FLOAT)
+      else if (other->type == WPP_OBJ_FLOAT)
         obj->as._int += (int)other->as._float;
       else
         sprintf (exec->error, "unsupported operation");
     }
-  else if (obj->type == OBJ_FLOAT)
+  else if (obj->type == WPP_OBJ_FLOAT)
     {
-      if (other->type == OBJ_INT)
+      if (other->type == WPP_OBJ_INT)
         obj->as._float += (float)other->as._int;
-      else if (other->type == OBJ_FLOAT)
+      else if (other->type == WPP_OBJ_FLOAT)
         obj->as._float += other->as._float;
       else
         sprintf (exec->error, "unsupported operation");
@@ -38,22 +38,22 @@ exec_obj_add (Exec *exec, Object *obj, Object *other)
 }
 
 bool
-exec_obj_sub (Exec *exec, Object *obj, Object *other)
+wpp_exec_obj_sub (wppExec *exec, wppObject *obj, wppObject *other)
 {
-  if (obj->type == OBJ_INT)
+  if (obj->type == WPP_OBJ_INT)
     {
-      if (other->type == OBJ_INT)
+      if (other->type == WPP_OBJ_INT)
         obj->as._int -= other->as._int;
-      else if (other->type == OBJ_FLOAT)
+      else if (other->type == WPP_OBJ_FLOAT)
         obj->as._int -= (int)other->as._float;
       else
         sprintf (exec->error, "unsupported operation");
     }
-  else if (obj->type == OBJ_FLOAT)
+  else if (obj->type == WPP_OBJ_FLOAT)
     {
-      if (other->type == OBJ_INT)
+      if (other->type == WPP_OBJ_INT)
         obj->as._float -= (float)other->as._int;
-      else if (other->type == OBJ_FLOAT)
+      else if (other->type == WPP_OBJ_FLOAT)
         obj->as._float -= other->as._float;
       else
         sprintf (exec->error, "unsupported operation");
@@ -65,22 +65,22 @@ exec_obj_sub (Exec *exec, Object *obj, Object *other)
 }
 
 bool
-exec_obj_mul (Exec *exec, Object *obj, Object *other)
+wpp_exec_obj_mul (wppExec *exec, wppObject *obj, wppObject *other)
 {
-  if (obj->type == OBJ_INT)
+  if (obj->type == WPP_OBJ_INT)
     {
-      if (other->type == OBJ_INT)
+      if (other->type == WPP_OBJ_INT)
         obj->as._int *= other->as._int;
-      else if (other->type == OBJ_FLOAT)
+      else if (other->type == WPP_OBJ_FLOAT)
         obj->as._int *= (int)other->as._float;
       else
         sprintf (exec->error, "unsupported operation");
     }
-  else if (obj->type == OBJ_FLOAT)
+  else if (obj->type == WPP_OBJ_FLOAT)
     {
-      if (other->type == OBJ_INT)
+      if (other->type == WPP_OBJ_INT)
         obj->as._float *= (float)other->as._int;
-      else if (other->type == OBJ_FLOAT)
+      else if (other->type == WPP_OBJ_FLOAT)
         obj->as._float *= other->as._float;
       else
         sprintf (exec->error, "unsupported operation");
@@ -92,22 +92,22 @@ exec_obj_mul (Exec *exec, Object *obj, Object *other)
 }
 
 bool
-exec_obj_div (Exec *exec, Object *obj, Object *other)
+wpp_exec_obj_div (wppExec *exec, wppObject *obj, wppObject *other)
 {
-  if (obj->type == OBJ_INT)
+  if (obj->type == WPP_OBJ_INT)
     {
-      if (other->type == OBJ_INT)
+      if (other->type == WPP_OBJ_INT)
         obj->as._int /= other->as._int;
-      else if (other->type == OBJ_FLOAT)
+      else if (other->type == WPP_OBJ_FLOAT)
         obj->as._int /= (int)other->as._float;
       else
         sprintf (exec->error, "unsupported operation");
     }
-  else if (obj->type == OBJ_FLOAT)
+  else if (obj->type == WPP_OBJ_FLOAT)
     {
-      if (other->type == OBJ_INT)
+      if (other->type == WPP_OBJ_INT)
         obj->as._float /= (float)other->as._int;
-      else if (other->type == OBJ_FLOAT)
+      else if (other->type == WPP_OBJ_FLOAT)
         obj->as._float /= other->as._float;
       else
         sprintf (exec->error, "unsupported operation");
