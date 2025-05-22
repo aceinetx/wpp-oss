@@ -1,10 +1,10 @@
 #include "exec.h"
 #include "lexer.h"
-#include <fcntl.h>
 #include <stdio.h>
 #include <string.h>
-#include <sys/mman.h>
+#include <stdlib.h>
 #include <sys/stat.h>
+#include <fcntl.h>
 #include <unistd.h>
 
 static void usage (void);
@@ -14,7 +14,8 @@ main (int argc, char **argv)
 {
   wppLexer *lexer;
   wppExec *exec;
-  int fd, i, exit_level;
+  FILE *file;
+  int i, exit_level;
   struct stat stat;
   char *code;
   char *filename = NULL;
@@ -56,28 +57,48 @@ main (int argc, char **argv)
       return 1;
     }
 
-  /* read entire file */
-  fd = open (argv[1], 0, 0);
-  if (fd == -1)
+  /* open the file */
+  file = fopen(filename, "rb");
+  if (!file)
     {
-      perror ("wpp: open");
+      perror ("wpp: fopen");
       return 1;
     }
 
-  if (fstat (fd, &stat) == -1)
+  /* get file size */
+  if (fstat(fileno(file), &stat) == -1)
     {
       perror ("wpp: fstat");
+      fclose(file);
       return 1;
     }
 
   if (!stat.st_size)
     {
       puts ("wpp: stat.st_size: file is empty");
+      fclose(file);
       return 1;
     }
 
-  /* map the file contents */
-  code = mmap (0, stat.st_size, PROT_READ | PROT_WRITE, MAP_PRIVATE, fd, 0);
+  /* allocate memory for file contents */
+  code = (char *)malloc(stat.st_size);
+  if (!code)
+    {
+      perror("wpp: malloc");
+      fclose(file);
+      return 1;
+    }
+
+  /* read entire file */
+  if (fread(code, 1, stat.st_size, file) != (size_t)stat.st_size)
+    {
+      perror("wpp: fread");
+      free(code);
+      fclose(file);
+      return 1;
+    }
+
+  fclose(file);
 
   {
     lexer = wpp_lexer_new (code);
@@ -98,9 +119,8 @@ main (int argc, char **argv)
     wpp_exec_free (exec);
   }
 
-  /* close & free up the file buffer and the file itself */
-  munmap (code, stat.st_size);
-  close (fd);
+  /* free up the file buffer */
+  free(code);
   return exit_level;
 }
 
