@@ -1,13 +1,9 @@
-fn a;
-	println "a";
-nf;
-
-fn b;
-	println "b";
-nf;
-
 fn main;
-	cp b a;
-	call b;
+	println "$main^";	
+	println "$f^";	
+nf;
+
+fn f;
+
 nf;
 

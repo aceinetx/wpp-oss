@@ -13,13 +13,39 @@ main (int argc, char **argv)
 {
   Lexer *lexer;
   Exec *exec;
-  int fd;
+  int fd, i;
   struct stat stat;
   char *code;
+  char *filename = NULL;
 
   if (argc <= 1)
     {
       usage ();
+      return 1;
+    }
+
+  for (i = 1; i < argc; i++)
+    {
+      char *arg = argv[i];
+      if (arg[0] == '-')
+        {
+          if (!strcmp (arg, "--help"))
+            {
+              usage ();
+              printf ("sizeof(Lexer) = %u\n", sizeof (Lexer));
+              printf ("sizeof(Exec) = %u\n", sizeof (Exec));
+              printf ("sizeof(Object) = %u\n", sizeof (Object));
+              printf ("sizeof(Token) = %u\n", sizeof (Token));
+              return 0;
+            }
+        }
+      else
+        filename = arg;
+    }
+
+  if (!filename)
+    {
+      puts ("wpp: no filename provided");
       return 1;
     }
 
@@ -69,5 +95,5 @@ main (int argc, char **argv)
 static void
 usage (void)
 {
-  puts ("usage: wpp [filename]");
+  puts ("usage: wpp [filename] [options]...");
 }
