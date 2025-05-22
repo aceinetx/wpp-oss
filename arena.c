@@ -1,10 +1,10 @@
 #include "arena.h"
 #include <stdlib.h>
 
-Arena
+wppArena
 wpp_arena_new (void)
 {
-  Arena arena;
+  wppArena arena;
   arena.data = NULL;
   arena.length = 0;
   arena.size = 0;
@@ -12,7 +12,7 @@ wpp_arena_new (void)
 }
 
 void *
-wpp_arena_alloc (Arena *arena, uint32_t size)
+wpp_arena_alloc (wppArena *arena, uint32_t size)
 {
   arena->data = realloc (arena->data, arena->size + sizeof (void *));
   arena->data[arena->length] = malloc (size);
@@ -24,7 +24,7 @@ wpp_arena_alloc (Arena *arena, uint32_t size)
 }
 
 void
-wpp_arena_append (Arena *arena, void *ptr)
+wpp_arena_append (wppArena *arena, void *ptr)
 {
   uint32_t i;
   for (i = 0; i < arena->length; i++)
@@ -42,7 +42,7 @@ wpp_arena_append (Arena *arena, void *ptr)
 }
 
 void
-wpp_arena_free (Arena *arena)
+wpp_arena_free (wppArena *arena)
 {
   uint32_t i;
 

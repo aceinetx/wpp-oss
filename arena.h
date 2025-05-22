@@ -8,13 +8,13 @@ typedef struct
   void **data;
   uint32_t size;
   uint32_t length;
-} Arena;
+} wppArena;
 
-Arena wpp_arena_new (void);
+wppArena wpp_arena_new (void);
 
-void *wpp_arena_alloc (Arena *arena, uint32_t size);
-void wpp_arena_append (Arena *arena, void *ptr);
+void *wpp_arena_alloc (wppArena *arena, uint32_t size);
+void wpp_arena_append (wppArena *arena, void *ptr);
 
-void wpp_arena_free (Arena *arena);
+void wpp_arena_free (wppArena *arena);
 
 #endif
