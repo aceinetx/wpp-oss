@@ -63,12 +63,29 @@ wpp_do_var (wppExec *exec)
   eq = wpp_lexer_next (exec->lexer);
   value = wpp_lexer_next (exec->lexer);
   DO_TEST_TOKEN (name, WPP_TOKEN_IDENTIFIER);
-  DO_TEST_TOKEN (value, WPP_TOKEN_INT);
   DO_TEST_TOKEN (wpp_lexer_next (exec->lexer), WPP_TOKEN_SEMICOLON);
 
-  object.type = WPP_OBJ_INT;
-  object.as._int = value.as.number;
-  object.name = name.as.str;
+  switch (value.type)
+    {
+    case WPP_TOKEN_INT:
+      object.type = WPP_OBJ_INT;
+      object.as._int = value.as.number;
+      object.name = name.as.str;
+      break;
+    case WPP_TOKEN_IDENTIFIER:
+      var = wpp_exec_getvar (exec, value.as.str);
+      if (!var)
+        {
+          sprintf (exec->error, "wpp: undefined variable");
+          return false;
+        }
+
+      wpp_exec_obj_eq (exec, &object, var);
+      break;
+    default:
+      sprintf (exec->error, "wpp: syntax error");
+      return false;
+    }
 
   var = wpp_exec_getvar (exec, name.as.str);
   if (!var)

@@ -1,9 +1,6 @@
 fn main;
-	println "$main^";	
-	println "$f^";	
-nf;
-
-fn f;
-
+	var i = 69;
+	var j = i;
+	println "$j^";
 nf;
 
