@@ -54,7 +54,7 @@ typedef struct
   char *code;
   unsigned int pos;
 
-  Arena strings_arena;
+  wppArena strings_arena;
 
   unsigned int line;
 } wppLexer;

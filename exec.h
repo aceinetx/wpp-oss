@@ -31,8 +31,8 @@ typedef struct
   unsigned int vars_len;
   unsigned int vars_capacity;
 
-  Arena objects_arena;
-  Arena strings_arena;
+  wppArena objects_arena;
+  wppArena strings_arena;
 
   wppLexer *lexer;
 
