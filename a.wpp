@@ -1,7 +1,10 @@
+fn add;
+  var arg1 + arg2;
+nf;
+
 fn main;
-  var a = "123";
-  cast a int;
-  var a + 1;
-  println "Result: $a^";
+  call add 123 1;
+
+  println "Result: $arg1^";
   return 0;
 nf;
