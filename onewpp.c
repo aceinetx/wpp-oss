@@ -1,6 +1,7 @@
 /* cc -std=c90 -Wall -Wextra -o wpp onewpp.c */
 #include "arena.c"
 #include "exec.c"
+#include "exec_cast.c"
 #include "exec_copy.c"
 #include "exec_fn.c"
 #include "exec_misc.c"
