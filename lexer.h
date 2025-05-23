@@ -57,6 +57,7 @@ typedef struct
 {
   char *code;
   unsigned int pos;
+  unsigned int code_len;
 
   wppArena strings_arena;
 

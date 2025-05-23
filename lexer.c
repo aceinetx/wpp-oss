@@ -40,6 +40,7 @@ wpp_lexer_new (char *code)
   wppLexer *lexer = malloc (sizeof (wppLexer));
   lexer->strings_arena = wpp_arena_new ();
   lexer->code = code;
+  lexer->code_len = strlen (lexer->code);
   lexer->line = 1;
   lexer->pos = 0;
   return lexer;
@@ -65,7 +66,7 @@ wpp_lexer_identifier (wppLexer *lexer)
   tok.as.str = malloc (1);
 
   len = 1;
-  while (lexer->pos < strlen (lexer->code))
+  while (lexer->pos < lexer->code_len)
     {
       char c = lexer->code[lexer->pos];
 
@@ -100,7 +101,7 @@ wpp_lexer_string (wppLexer *lexer)
   len = 1;
 
   definition = false;
-  while (lexer->pos < strlen (lexer->code))
+  while (lexer->pos < lexer->code_len)
     {
       char c = lexer->code[lexer->pos];
 
@@ -156,7 +157,6 @@ wpp_lexer_number (wppLexer *lexer)
   wppToken tok;
   bool is_hex;
   bool is_float = false;
-  size_t length;
   char c;
   int value;
   int start_pos = lexer->pos;
@@ -168,9 +168,7 @@ wpp_lexer_number (wppLexer *lexer)
   is_hex = false;
   tok.as.number = 0;
 
-  length = strlen (lexer->code);
-
-  while (lexer->pos < length)
+  while (lexer->pos < lexer->code_len)
     {
       c = lexer->code[lexer->pos];
 
@@ -222,7 +220,7 @@ wpp_lexer_number (wppLexer *lexer)
       float_start = start_pos;
       float_end = lexer->pos;
       /* find the end of the float literal */
-      while (lexer->pos < length
+      while (lexer->pos < lexer->code_len
              && (is_digit (lexer->code[lexer->pos])
                  || lexer->code[lexer->pos] == '.'))
         lexer->pos++;
@@ -244,7 +242,7 @@ wpp_lexer_next (wppLexer *lexer)
 {
   wppToken token = wpp_token_new ();
 
-  while (lexer->pos < strlen (lexer->code))
+  while (lexer->pos < lexer->code_len)
     {
       char c = lexer->code[lexer->pos];
       token = wpp_token_new ();
