@@ -14,6 +14,8 @@ bool wpp_do_cp (wppExec *exec);
 bool wpp_do_scanln (wppExec *exec);
 bool wpp_do_return (wppExec *exec);
 bool wpp_do_cast (wppExec *exec);
+bool wpp_do_namespace (wppExec *exec);
+bool wpp_do_nsend (wppExec *exec);
 
 wppExec *
 wpp_exec_new (wppLexer *lexer)
@@ -93,6 +95,8 @@ wpp_exec_run (wppExec *exec)
       DO_TOKEN (WPP_TOKEN_FN, wpp_do_fn);
       DO_TOKEN (WPP_TOKEN_NF, wpp_do_nf);
       DO_TOKEN (WPP_TOKEN_VAR, wpp_do_var);
+      DO_TOKEN (WPP_TOKEN_NAMESPACE, wpp_do_namespace);
+      DO_TOKEN (WPP_TOKEN_NSEND, wpp_do_nsend);
       if (main_iteration)
         {
           DO_TOKEN (WPP_TOKEN_PRINTLN, wpp_do_println);

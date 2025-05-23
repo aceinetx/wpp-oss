@@ -41,6 +41,8 @@ typedef struct
   size_t ret_stack_top;
 
   unsigned int exit_level;
+
+  char *currentNamespace;
 } wppExec;
 
 wppExec *wpp_exec_new (wppLexer *lexer);
