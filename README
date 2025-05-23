@@ -3,7 +3,12 @@ wpp-oss
 An ANSI C open-source version of watermelon++ (https://github.com/aceinetx/watermelon)
 
 Tested systems:
-Arch linux
-Android 10 (Termux)
-Arch linux (Windows 11 WSL)
-Windows 11 (msys2 ucrt64)
+- Arch linux
+- Android 10 (Termux)
+- Arch linux (Windows 11 WSL)
+- Windows 11 (msys2 ucrt64)
+
+Compilation requirements:
+- C compiler compatible with ANSI C (C89/C90)
+- C standard library for C99
+- Makefile (optional, for incremental compiling)
