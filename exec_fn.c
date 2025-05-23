@@ -101,7 +101,8 @@ wpp_do_call (wppExec *exec)
           var = wpp_exec_getvar (exec, tok.as.str);
           if (!var)
             {
-              sprintf (exec->error, "call: undefined variable");
+              snprintf (exec->error, sizeof (exec->error),
+                        "call: undefined variable %s", tok.as.str);
               return false;
             }
 
@@ -109,7 +110,7 @@ wpp_do_call (wppExec *exec)
         }
       else
         {
-          sprintf (exec->error, "call: invalid token");
+          snprintf (exec->error, sizeof (exec->error), "call: invalid token");
           return false;
         }
 

@@ -47,7 +47,7 @@ wpp_exec_obj_cast (wppExec *exec, wppObject *obj, unsigned char type)
     }
   else
     {
-      sprintf (exec->error, "unsupported cast");
+      snprintf (exec->error, sizeof (exec->error), "unsupported cast");
       return false;
     }
 
@@ -70,7 +70,8 @@ wpp_do_cast (wppExec *exec)
   var = wpp_exec_getvar (exec, var_tok.as.str);
   if (!var)
     {
-      sprintf (exec->error, "undefined variable");
+      snprintf (exec->error, sizeof (exec->error),
+                "cast: undefined variable %s", var_tok.as.str);
       return false;
     }
 
@@ -88,7 +89,8 @@ wpp_do_cast (wppExec *exec)
     }
   else
     {
-      sprintf (exec->error, "unknown type name");
+      snprintf (exec->error, sizeof (exec->error),
+                "cast: unknown type name %s", type.as.str);
       return false;
     }
 

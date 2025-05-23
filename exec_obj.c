@@ -20,7 +20,7 @@ wpp_exec_obj_add (wppExec *exec, wppObject *obj, wppObject *other)
       else if (other->type == WPP_OBJ_FLOAT)
         obj->as._int += (int)other->as._float;
       else
-        sprintf (exec->error, "unsupported operation");
+        snprintf (exec->error, sizeof (exec->error), "unsupported operation");
     }
   else if (obj->type == WPP_OBJ_FLOAT)
     {
@@ -29,10 +29,10 @@ wpp_exec_obj_add (wppExec *exec, wppObject *obj, wppObject *other)
       else if (other->type == WPP_OBJ_FLOAT)
         obj->as._float += other->as._float;
       else
-        sprintf (exec->error, "unsupported operation");
+        snprintf (exec->error, sizeof (exec->error), "unsupported operation");
     }
   else
-    sprintf (exec->error, "unsupported operation");
+    snprintf (exec->error, sizeof (exec->error), "unsupported operation");
 
   return !(*exec->error);
 }
@@ -47,7 +47,7 @@ wpp_exec_obj_sub (wppExec *exec, wppObject *obj, wppObject *other)
       else if (other->type == WPP_OBJ_FLOAT)
         obj->as._int -= (int)other->as._float;
       else
-        sprintf (exec->error, "unsupported operation");
+        snprintf (exec->error, sizeof (exec->error), "unsupported operation");
     }
   else if (obj->type == WPP_OBJ_FLOAT)
     {
@@ -56,10 +56,10 @@ wpp_exec_obj_sub (wppExec *exec, wppObject *obj, wppObject *other)
       else if (other->type == WPP_OBJ_FLOAT)
         obj->as._float -= other->as._float;
       else
-        sprintf (exec->error, "unsupported operation");
+        snprintf (exec->error, sizeof (exec->error), "unsupported operation");
     }
   else
-    sprintf (exec->error, "unsupported operation");
+    snprintf (exec->error, sizeof (exec->error), "unsupported operation");
 
   return !(*exec->error);
 }
@@ -74,7 +74,7 @@ wpp_exec_obj_mul (wppExec *exec, wppObject *obj, wppObject *other)
       else if (other->type == WPP_OBJ_FLOAT)
         obj->as._int *= (int)other->as._float;
       else
-        sprintf (exec->error, "unsupported operation");
+        snprintf (exec->error, sizeof (exec->error), "unsupported operation");
     }
   else if (obj->type == WPP_OBJ_FLOAT)
     {
@@ -83,10 +83,10 @@ wpp_exec_obj_mul (wppExec *exec, wppObject *obj, wppObject *other)
       else if (other->type == WPP_OBJ_FLOAT)
         obj->as._float *= other->as._float;
       else
-        sprintf (exec->error, "unsupported operation");
+        snprintf (exec->error, sizeof (exec->error), "unsupported operation");
     }
   else
-    sprintf (exec->error, "unsupported operation");
+    snprintf (exec->error, sizeof (exec->error), "unsupported operation");
 
   return !(*exec->error);
 }
@@ -101,7 +101,7 @@ wpp_exec_obj_div (wppExec *exec, wppObject *obj, wppObject *other)
       else if (other->type == WPP_OBJ_FLOAT)
         obj->as._int /= (int)other->as._float;
       else
-        sprintf (exec->error, "unsupported operation");
+        snprintf (exec->error, sizeof (exec->error), "unsupported operation");
     }
   else if (obj->type == WPP_OBJ_FLOAT)
     {
@@ -110,10 +110,10 @@ wpp_exec_obj_div (wppExec *exec, wppObject *obj, wppObject *other)
       else if (other->type == WPP_OBJ_FLOAT)
         obj->as._float /= other->as._float;
       else
-        sprintf (exec->error, "unsupported operation");
+        snprintf (exec->error, sizeof (exec->error), "unsupported operation");
     }
   else
-    sprintf (exec->error, "unsupported operation");
+    snprintf (exec->error, sizeof (exec->error), "unsupported operation");
 
   return !(*exec->error);
 }

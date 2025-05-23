@@ -26,14 +26,15 @@ wpp_do_return (wppExec *exec)
       var = wpp_exec_getvar (exec, arg.as.str);
       if (!var)
         {
-          sprintf (exec->error, "wpp: undefined var");
+          snprintf (exec->error, sizeof (exec->error),
+                    "return: undefined variable %s", arg.as.str);
           return false;
         }
 
       wpp_exec_obj_eq (exec, &obj, var);
       break;
     default:
-      sprintf (exec->error, "wpp: syntax error");
+      snprintf (exec->error, sizeof (exec->error), "return: syntax error");
       return false;
     }
 

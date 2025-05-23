@@ -17,7 +17,8 @@ wpp_do_cp (wppExec *exec)
   osrc = wpp_exec_getvar (exec, src.as.str);
   if (!osrc)
     {
-      printf ("wpp: unknown var %s\n", src.as.str);
+      snprintf (exec->error, sizeof (exec->error),
+                "copy: undefined variable %s", src.as.str);
       return false;
     }
 

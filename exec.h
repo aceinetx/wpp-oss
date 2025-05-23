@@ -1,5 +1,6 @@
 #ifndef EXEC_H
 #define EXEC_H
+#include "cfwd.h"
 #include "lexer.h"
 #include "object.h"
 #include "wpp.h"
@@ -8,7 +9,7 @@
 #define DO_TEST_TOKEN(v, t)                                                   \
   if (v.type != t)                                                            \
     {                                                                         \
-      sprintf (exec->error, "syntax error");                                  \
+      snprintf (exec->error, sizeof (exec->error), "syntax error");           \
       return false;                                                           \
     }
 
