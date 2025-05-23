@@ -19,6 +19,9 @@ bool wpp_do_nsend (wppExec *exec);
 bool wpp_do_if (wppExec *exec);
 bool wpp_do_end (wppExec *exec);
 bool wpp_do_else (wppExec *exec);
+bool wpp_do_loop (wppExec *exec);
+bool wpp_do_lend (wppExec *exec);
+bool wpp_do_break (wppExec *exec);
 
 wppExec *
 wpp_exec_new (wppLexer *lexer)
@@ -112,6 +115,9 @@ wpp_exec_run (wppExec *exec)
           DO_TOKEN (WPP_TOKEN_IF, wpp_do_if);
           DO_TOKEN (WPP_TOKEN_END, wpp_do_end);
           DO_TOKEN (WPP_TOKEN_ELSE, wpp_do_else);
+          DO_TOKEN (WPP_TOKEN_LOOP, wpp_do_loop);
+          DO_TOKEN (WPP_TOKEN_LEND, wpp_do_lend);
+          DO_TOKEN (WPP_TOKEN_BREAK, wpp_do_break);
         }
 
 #undef DO_TOKEN

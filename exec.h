@@ -40,6 +40,9 @@ typedef struct
   unsigned int ret_stack[256];
   size_t ret_stack_top;
 
+  unsigned int loop_stack[256];
+  size_t loop_stack_top;
+
   unsigned int exit_level;
 
   char *currentNamespace;

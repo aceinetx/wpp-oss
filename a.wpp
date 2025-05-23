@@ -1,34 +1,18 @@
 fn main;
-  var a = 123;
 
-  if a > 69
-    println "'a' is bigger than 69";
-		if 69 < 123
-			println "and 69 is less than 123";
-		else
-			println "how did we get here 1";
-		end
+  var count = 1;
+  var max = 5;
 
-		if 4 < 2
-			println "how did we get here 2";
-		else
-			println "but 4 is not less than 2";
-		end
-	else
-		println "how did we get here 3";
-  end
+  loop;
 
-	if 4 == 4
-		println "4 is 4";
-	else
-		println "how did we get here 4";
-	end
+    println "Count: $count^";
+    var count + 1;
 
-	if 2 != 4
-		println "2 is not 4";
-	else
-		println "how did we get here 5";
-	end
+    if count >= 6
+    break
+    end
+
+  lend;
 
   return 0;
 nf;
