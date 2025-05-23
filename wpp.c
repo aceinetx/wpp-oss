@@ -7,8 +7,6 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
-int fileno (FILE *stream);
-
 static void usage (void);
 
 int

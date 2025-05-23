@@ -4,8 +4,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-char *strdup (const char *);
-
 wppObject *
 wpp_exec_getvar (wppExec *exec, const char *name)
 {

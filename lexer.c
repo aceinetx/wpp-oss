@@ -1,10 +1,9 @@
 #include "lexer.h"
+#include "cfwd.h"
 #include "wpp.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
-float strtof (const char *str, char **endptr);
 
 static bool
 is_letter (char c)

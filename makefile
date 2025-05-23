@@ -19,7 +19,7 @@ $(BUILDDIR)wpp: $(BUILDDIR)wpp.o $(BUILDDIR)lexer.o $(BUILDDIR)arena.o $(BUILDDI
 $(BUILDDIR)wpp.o: wpp.c lexer.h exec.h
 	$(CC) -c -o $@ $(CFLAGS) $<
 
-$(BUILDDIR)lexer.o: lexer.c lexer.h wpp.h
+$(BUILDDIR)lexer.o: lexer.c lexer.h wpp.h cfwd.h
 	$(CC) -c -o $@ $(CFLAGS) $<
 
 $(BUILDDIR)arena.o: arena.c arena.h

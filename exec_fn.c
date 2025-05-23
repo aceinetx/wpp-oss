@@ -4,8 +4,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-char *strdup (const char *);
-
 bool
 wpp_do_nf (wppExec *exec)
 {
