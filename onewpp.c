@@ -5,6 +5,7 @@
 #include "exec_copy.c"
 #include "exec_fn.c"
 #include "exec_misc.c"
+#include "exec_namespace.c"
 #include "exec_obj.c"
 #include "exec_print.c"
 #include "exec_ret_stack.c"

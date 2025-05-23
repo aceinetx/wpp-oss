@@ -69,7 +69,7 @@ wpp_lexer_identifier (wppLexer *lexer)
     {
       char c = lexer->code[lexer->pos];
 
-      if (!is_identifier_letter (c) && !is_digit (c))
+      if (!is_identifier_letter (c) && !is_digit (c) && !(c == ':'))
         {
           break;
         }
@@ -265,6 +265,8 @@ wpp_lexer_next (wppLexer *lexer)
           DO_IDENTIFIR ("scanln", WPP_TOKEN_SCANLN);
           DO_IDENTIFIR ("return", WPP_TOKEN_RETURN);
           DO_IDENTIFIR ("cast", WPP_TOKEN_CAST);
+          DO_IDENTIFIR ("namespace", WPP_TOKEN_NAMESPACE);
+          DO_IDENTIFIR ("nsEnd", WPP_TOKEN_NSEND);
 #undef DO_IDENTIFIR
           if (token.type == WPP_TOKEN_IDENTIFIER)
             wpp_arena_append (&lexer->strings_arena, token.as.str);

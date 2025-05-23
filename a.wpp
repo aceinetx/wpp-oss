@@ -1,10 +1,12 @@
-fn add;
-  var arg1 + arg2;
-nf;
+namespace myNamespace; ? define a namespace called myNamespace -?
+
+  fn sayhello;
+    println "Hello, world!";
+  nf;
+
+nsEnd;                 ? stop namespace definition -?
 
 fn main;
-  call add 123 1;
-
-  println "Result: $arg1^";
+  call myNamespace::sayhello;
   return 0;
 nf;

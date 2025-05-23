@@ -31,7 +31,20 @@ wpp_do_fn (wppExec *exec)
   DO_TEST_TOKEN (name, WPP_TOKEN_IDENTIFIER);
   DO_TEST_TOKEN (wpp_lexer_next (exec->lexer), WPP_TOKEN_SEMICOLON);
 
-  fn->name = name.as.str;
+  if (exec->currentNamespace)
+    {
+      size_t name_size
+          = strlen (name.as.str) + strlen (exec->currentNamespace) + 2 + 1;
+      fn->name = wpp_arena_alloc (&exec->strings_arena, name_size);
+
+      snprintf (fn->name, name_size, "%s::%s", exec->currentNamespace,
+                name.as.str);
+    }
+  else
+    {
+      fn->name = name.as.str;
+    }
+
   fn->as.function.pos = exec->lexer->pos + 1;
 
   /* append the function to the function list */
