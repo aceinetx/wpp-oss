@@ -26,4 +26,4 @@ Compilation requirements:
 Roadmap:
 - If statements
 - Loops
-- Standard library (std, winapi, array, scope namespaces)
+- Standard library (std, winapi, array, hashmap namespaces)
