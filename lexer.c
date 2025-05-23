@@ -267,6 +267,9 @@ wpp_lexer_next (wppLexer *lexer)
           DO_IDENTIFIR ("cast", WPP_TOKEN_CAST);
           DO_IDENTIFIR ("namespace", WPP_TOKEN_NAMESPACE);
           DO_IDENTIFIR ("nsEnd", WPP_TOKEN_NSEND);
+          DO_IDENTIFIR ("if", WPP_TOKEN_IF);
+          DO_IDENTIFIR ("else", WPP_TOKEN_ELSE);
+          DO_IDENTIFIR ("end", WPP_TOKEN_END);
 #undef DO_IDENTIFIR
           if (token.type == WPP_TOKEN_IDENTIFIER)
             wpp_arena_append (&lexer->strings_arena, token.as.str);
@@ -289,6 +292,11 @@ wpp_lexer_next (wppLexer *lexer)
       else if (c == '=')
         {
           token.type = WPP_TOKEN_EQ;
+          if (lexer->code[lexer->pos + 1] == '=')
+            {
+              token.type = WPP_TOKEN_EQEQ;
+              lexer->pos++;
+            }
           lexer->pos++;
         }
       else if (c == '+')
@@ -319,6 +327,31 @@ wpp_lexer_next (wppLexer *lexer)
             lexer->pos++;
           lexer->pos++;
         }
+      else if (c == '!' && lexer->code[lexer->pos + 1] == '=')
+        {
+          token.type = WPP_TOKEN_NOEQ;
+          lexer->pos += 2;
+        }
+      else if (c == '<')
+        {
+          token.type = WPP_TOKEN_LESS;
+          lexer->pos++;
+        }
+      else if (c == '>')
+        {
+          token.type = WPP_TOKEN_MORE;
+          lexer->pos++;
+        }
+      else if (c == '<' && lexer->code[lexer->pos + 1] == '=')
+        {
+          token.type = WPP_TOKEN_LSEQ;
+          lexer->pos += 2;
+        }
+      else if (c == '>' && lexer->code[lexer->pos + 1] == '=')
+        {
+          token.type = WPP_TOKEN_MREQ;
+          lexer->pos += 2;
+        }
 
       if (token.type != WPP_TOKEN_NULL)
         {
@@ -328,7 +361,7 @@ wpp_lexer_next (wppLexer *lexer)
       lexer->pos++;
     }
 
-  token.type = WPP_TOKEN_END;
+  token.type = WPP_TOKEN_FLEND;
   token.line = lexer->line;
   return token;
 }

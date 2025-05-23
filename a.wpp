@@ -1,12 +1,34 @@
-namespace myNamespace; ? define a namespace called myNamespace -?
-
-  fn sayhello;
-    println "Hello, world!";
-  nf;
-
-nsEnd;                 ? stop namespace definition -?
-
 fn main;
-  call myNamespace::sayhello;
+  var a = 123;
+
+  if a > 69
+    println "'a' is bigger than 69";
+		if 69 < 123
+			println "and 69 is less than 123";
+		else
+			println "how did we get here 1";
+		end
+
+		if 4 < 2
+			println "how did we get here 2";
+		else
+			println "but 4 is not less than 2";
+		end
+	else
+		println "how did we get here 3";
+  end
+
+	if 4 == 4
+		println "4 is 4";
+	else
+		println "how did we get here 4";
+	end
+
+	if 2 != 4
+		println "2 is not 4";
+	else
+		println "how did we get here 5";
+	end
+
   return 0;
 nf;

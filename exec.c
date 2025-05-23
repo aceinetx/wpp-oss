@@ -16,6 +16,9 @@ bool wpp_do_return (wppExec *exec);
 bool wpp_do_cast (wppExec *exec);
 bool wpp_do_namespace (wppExec *exec);
 bool wpp_do_nsend (wppExec *exec);
+bool wpp_do_if (wppExec *exec);
+bool wpp_do_end (wppExec *exec);
+bool wpp_do_else (wppExec *exec);
 
 wppExec *
 wpp_exec_new (wppLexer *lexer)
@@ -85,7 +88,7 @@ wpp_exec_run (wppExec *exec)
     main_iteration = true;
 
   token = wpp_lexer_next (exec->lexer);
-  while (token.type != WPP_TOKEN_END)
+  while (token.type != WPP_TOKEN_FLEND)
     {
 #define DO_TOKEN(t, f)                                                        \
   if (token.type == t)                                                        \
@@ -106,6 +109,9 @@ wpp_exec_run (wppExec *exec)
           DO_TOKEN (WPP_TOKEN_SCANLN, wpp_do_scanln);
           DO_TOKEN (WPP_TOKEN_RETURN, wpp_do_return);
           DO_TOKEN (WPP_TOKEN_CAST, wpp_do_cast);
+          DO_TOKEN (WPP_TOKEN_IF, wpp_do_if);
+          DO_TOKEN (WPP_TOKEN_END, wpp_do_end);
+          DO_TOKEN (WPP_TOKEN_ELSE, wpp_do_else);
         }
 
 #undef DO_TOKEN
