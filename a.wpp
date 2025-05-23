@@ -1,11 +1,7 @@
-fn f;
-	var a = 23;
-	var a + a;
-	var a + 23;
-	cp ret a;
-nf;
-
 fn main;
-	call f;
+  var a = "123";
+  cast a int;
+  var a + 1;
+  println "Result: $a^";
+  return 0;
 nf;
-
