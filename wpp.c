@@ -1,11 +1,13 @@
 #include "exec.h"
 #include "lexer.h"
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-#include <sys/stat.h>
 #include <fcntl.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/stat.h>
 #include <unistd.h>
+
+int fileno (FILE *stream);
 
 static void usage (void);
 
@@ -58,7 +60,7 @@ main (int argc, char **argv)
     }
 
   /* open the file */
-  file = fopen(filename, "rb");
+  file = fopen (filename, "rb");
   if (!file)
     {
       perror ("wpp: fopen");
@@ -66,39 +68,39 @@ main (int argc, char **argv)
     }
 
   /* get file size */
-  if (fstat(fileno(file), &stat) == -1)
+  if (fstat (fileno (file), &stat) == -1)
     {
       perror ("wpp: fstat");
-      fclose(file);
+      fclose (file);
       return 1;
     }
 
   if (!stat.st_size)
     {
       puts ("wpp: stat.st_size: file is empty");
-      fclose(file);
+      fclose (file);
       return 1;
     }
 
   /* allocate memory for file contents */
-  code = (char *)malloc(stat.st_size);
+  code = (char *)malloc (stat.st_size);
   if (!code)
     {
-      perror("wpp: malloc");
-      fclose(file);
+      perror ("wpp: malloc");
+      fclose (file);
       return 1;
     }
 
   /* read entire file */
-  if (fread(code, 1, stat.st_size, file) != (size_t)stat.st_size)
+  if (fread (code, 1, stat.st_size, file) != (size_t)stat.st_size)
     {
-      perror("wpp: fread");
-      free(code);
-      fclose(file);
+      perror ("wpp: fread");
+      free (code);
+      fclose (file);
       return 1;
     }
 
-  fclose(file);
+  fclose (file);
 
   {
     lexer = wpp_lexer_new (code);
@@ -120,7 +122,7 @@ main (int argc, char **argv)
   }
 
   /* free up the file buffer */
-  free(code);
+  free (code);
   return exit_level;
 }
 
