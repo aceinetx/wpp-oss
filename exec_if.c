@@ -63,6 +63,17 @@ wpp_do_if (wppExec *exec)
       rhs.as._float = rhs_tok.as.fnumber;
     }
 
+  if (lhs_tok.type == WPP_TOKEN_STRING)
+    {
+      lhs.type = WPP_OBJ_STRING;
+      lhs.as.string = lhs_tok.as.str;
+    }
+  if (rhs_tok.type == WPP_TOKEN_STRING)
+    {
+      rhs.type = WPP_OBJ_STRING;
+      rhs.as.string = rhs_tok.as.str;
+    }
+
   if (lhs.type == (unsigned char)-1)
     {
       snprintf (exec->error, sizeof (exec->error),
@@ -97,9 +108,17 @@ wpp_do_if (wppExec *exec)
     {
     case WPP_TOKEN_EQEQ:
       skip = !memcmp (&lhs.as, &rhs.as, sizeof (lhs.as));
+      if (lhs.type == WPP_OBJ_STRING && rhs.type == WPP_OBJ_STRING)
+        {
+          skip = !(strcmp (lhs.as.string, rhs.as.string) == 0);
+        }
       break;
     case WPP_TOKEN_NOEQ:
       skip = (memcmp (&lhs.as, &rhs.as, sizeof (lhs.as)) < 0) ? 0 : 1;
+      if (lhs.type == WPP_OBJ_STRING && rhs.type == WPP_OBJ_STRING)
+        {
+          skip = !(strcmp (lhs.as.string, rhs.as.string) == 0);
+        }
       break;
     case WPP_TOKEN_LESS:
       DO_CMP (<);
