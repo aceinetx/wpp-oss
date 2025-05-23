@@ -60,4 +60,6 @@ bool wpp_exec_obj_sub (wppExec *exec, wppObject *obj, wppObject *other);
 bool wpp_exec_obj_mul (wppExec *exec, wppObject *obj, wppObject *other);
 bool wpp_exec_obj_div (wppExec *exec, wppObject *obj, wppObject *other);
 
+bool wpp_exec_obj_cast (wppExec *exec, wppObject *obj, unsigned char type);
+
 #endif

@@ -87,6 +87,11 @@ wpp_do_var (wppExec *exec)
 
       wpp_exec_obj_eq (exec, &object, var);
       break;
+    case WPP_TOKEN_STRING:
+      object.type = WPP_OBJ_STRING;
+      object.as.string = value.as.str;
+      object.name = name.as.str;
+      break;
     default:
       sprintf (exec->error, "wpp: syntax error");
       return false;

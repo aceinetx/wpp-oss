@@ -13,6 +13,7 @@ bool wpp_do_var (wppExec *exec);
 bool wpp_do_cp (wppExec *exec);
 bool wpp_do_scanln (wppExec *exec);
 bool wpp_do_return (wppExec *exec);
+bool wpp_do_cast (wppExec *exec);
 
 wppExec *
 wpp_exec_new (wppLexer *lexer)
@@ -100,6 +101,7 @@ wpp_exec_run (wppExec *exec)
           DO_TOKEN (WPP_TOKEN_CP, wpp_do_cp);
           DO_TOKEN (WPP_TOKEN_SCANLN, wpp_do_scanln);
           DO_TOKEN (WPP_TOKEN_RETURN, wpp_do_return);
+          DO_TOKEN (WPP_TOKEN_CAST, wpp_do_cast);
         }
 
 #undef DO_TOKEN
