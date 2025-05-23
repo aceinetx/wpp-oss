@@ -7,10 +7,10 @@ The code is mostly the same as in the original python version, but a lot of stuf
 - wpp-oss does not have __pyexec
 - wpp-oss will not have these standard library namespaces:
   - ImGui
-	- AutoHotkey
-	- RegEx
-	- scope
-	- timedvar
+  - AutoHotkey
+  - RegEx
+  - scope
+  - timedvar
 
 Tested systems:
 - Arch linux
