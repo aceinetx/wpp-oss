@@ -12,7 +12,7 @@ clean:
 $(BUILDDIR):
 	mkdir -p $(BUILDDIR)
 
-$(BUILDDIR)wpp: $(BUILDDIR)wpp.o $(BUILDDIR)lexer.o $(BUILDDIR)arena.o $(BUILDDIR)exec.o $(BUILDDIR)object.o $(BUILDDIR)exec_print.o $(BUILDDIR)exec_fn.o $(BUILDDIR)exec_var.o $(BUILDDIR)exec_copy.o $(BUILDDIR)exec_scanln.o $(BUILDDIR)exec_ret_stack.o $(BUILDDIR)exec_obj.o $(BUILDDIR)exec_misc.o $(BUILDDIR)exec_cast.o $(BUILDDIR)exec_namespace.o
+$(BUILDDIR)wpp: $(BUILDDIR)wpp.o $(BUILDDIR)lexer.o $(BUILDDIR)arena.o $(BUILDDIR)exec.o $(BUILDDIR)object.o $(BUILDDIR)exec_print.o $(BUILDDIR)exec_fn.o $(BUILDDIR)exec_var.o $(BUILDDIR)exec_copy.o $(BUILDDIR)exec_scanln.o $(BUILDDIR)exec_ret_stack.o $(BUILDDIR)exec_obj.o $(BUILDDIR)exec_misc.o $(BUILDDIR)exec_cast.o $(BUILDDIR)exec_namespace.o $(BUILDDIR)exec_if.o
 	$(CC) $(LDFLAGS) -o $@ $^
 
 # objects
@@ -56,6 +56,9 @@ $(BUILDDIR)exec_cast.o: exec_cast.c exec.h
 	$(CC) -c -o $@ $(CFLAGS) $<
 
 $(BUILDDIR)exec_namespace.o: exec_namespace.c exec.h
+	$(CC) -c -o $@ $(CFLAGS) $<
+
+$(BUILDDIR)exec_if.o: exec_if.c exec.h
 	$(CC) -c -o $@ $(CFLAGS) $<
 
 $(BUILDDIR)object.o: object.c object.h
