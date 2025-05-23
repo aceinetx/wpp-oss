@@ -330,7 +330,7 @@ wpp_lexer_next (wppLexer *lexer)
       else if (c == '!' && lexer->code[lexer->pos + 1] == '=')
         {
           token.type = WPP_TOKEN_NOEQ;
-          lexer->pos++;
+          lexer->pos += 2;
         }
       else if (c == '<')
         {
@@ -345,12 +345,12 @@ wpp_lexer_next (wppLexer *lexer)
       else if (c == '<' && lexer->code[lexer->pos + 1] == '=')
         {
           token.type = WPP_TOKEN_LSEQ;
-          lexer->pos++;
+          lexer->pos += 2;
         }
       else if (c == '>' && lexer->code[lexer->pos + 1] == '=')
         {
           token.type = WPP_TOKEN_MREQ;
-          lexer->pos++;
+          lexer->pos += 2;
         }
 
       if (token.type != WPP_TOKEN_NULL)

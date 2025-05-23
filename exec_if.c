@@ -14,7 +14,6 @@ wpp_do_if (wppExec *exec)
   lhs_tok = wpp_lexer_next (exec->lexer);
   op_tok = wpp_lexer_next (exec->lexer);
   rhs_tok = wpp_lexer_next (exec->lexer);
-  DO_TEST_TOKEN (wpp_lexer_next (exec->lexer), WPP_TOKEN_SEMICOLON);
 
   lhs.type = (unsigned char)-1;
   rhs.type = (unsigned char)-1;
@@ -67,30 +66,30 @@ wpp_do_if (wppExec *exec)
   if (lhs.type == (unsigned char)-1)
     {
       snprintf (exec->error, sizeof (exec->error),
-                "if: unsupported type for lhs operand");
+                "if: unsupported type for lhs operand (%d)", lhs_tok.type);
       return false;
     }
   if (rhs.type == (unsigned char)-1)
     {
       snprintf (exec->error, sizeof (exec->error),
-                "if: unsupported type for rhs operand");
+                "if: unsupported type for rhs operand (%d)", rhs_tok.type);
       return false;
     }
 
     /* perform comparisons */
 #define DO_CMP(oper)                                                          \
-  if (lhs.type == WPP_TOKEN_INT)                                              \
+  if (lhs.type == WPP_OBJ_INT)                                                \
     {                                                                         \
-      if (rhs.type == WPP_TOKEN_INT)                                          \
+      if (rhs.type == WPP_OBJ_INT)                                            \
         skip = !(lhs.as._int oper rhs.as._int);                               \
-      if (rhs.type == WPP_TOKEN_FLOAT)                                        \
+      if (rhs.type == WPP_OBJ_FLOAT)                                          \
         skip = !(lhs.as._int oper (int) rhs.as._float);                       \
     }                                                                         \
-  if (lhs.type == WPP_TOKEN_FLOAT)                                            \
+  if (lhs.type == WPP_OBJ_FLOAT)                                              \
     {                                                                         \
-      if (rhs.type == WPP_TOKEN_INT)                                          \
+      if (rhs.type == WPP_OBJ_INT)                                            \
         skip = !(lhs.as._float oper (float) rhs.as._int);                     \
-      if (rhs.type == WPP_TOKEN_FLOAT)                                        \
+      if (rhs.type == WPP_OBJ_FLOAT)                                          \
         skip = !(lhs.as._float oper rhs.as._float);                           \
     }
 
@@ -100,13 +99,28 @@ wpp_do_if (wppExec *exec)
       skip = !memcmp (&lhs.as, &rhs.as, sizeof (lhs.as));
       break;
     case WPP_TOKEN_NOEQ:
-      skip = memcmp (&lhs.as, &rhs.as, sizeof (lhs.as));
+      skip = (memcmp (&lhs.as, &rhs.as, sizeof (lhs.as)) < 0) ? 0 : 1;
       break;
     case WPP_TOKEN_LESS:
       DO_CMP (<);
       break;
     case WPP_TOKEN_MORE:
       DO_CMP (>);
+      /*
+            if (lhs.type == WPP_OBJ_INT)
+              {
+                if (rhs.type == WPP_OBJ_INT)
+                  skip = !(lhs.as._int > rhs.as._int);
+                if (rhs.type == WPP_OBJ_FLOAT)
+                  skip = !(lhs.as._int > (int)rhs.as._float);
+              }
+            if (lhs.type == WPP_OBJ_FLOAT)
+              {
+                if (rhs.type == WPP_OBJ_INT)
+                  skip = !(lhs.as._float > (float)rhs.as._int);
+                if (rhs.type == WPP_OBJ_FLOAT)
+                  skip = !(lhs.as._float > rhs.as._float);
+              }*/
       break;
     case WPP_TOKEN_LSEQ:
       DO_CMP (<=);
@@ -123,9 +137,59 @@ wpp_do_if (wppExec *exec)
 
   if (skip)
     {
+      unsigned int if_count = 0;
       for (;;)
         {
           wppToken token = wpp_lexer_next (exec->lexer);
+          if (token.type == WPP_TOKEN_IF)
+            {
+              if_count++;
+            }
+          else if (token.type == WPP_TOKEN_END)
+            {
+              if (if_count > 0)
+                if_count--;
+              else
+                {
+                  break;
+                }
+            }
+          else if (token.type == WPP_TOKEN_ELSE && if_count == 0)
+            {
+              break;
+            }
+        }
+    }
+
+  return true;
+}
+
+bool
+wpp_do_end (wppExec *exec)
+{
+  (void)exec;
+  return true;
+}
+
+bool
+wpp_do_else (wppExec *exec)
+{
+  unsigned int if_count = 0;
+  for (;;)
+    {
+      wppToken token = wpp_lexer_next (exec->lexer);
+      if (token.type == WPP_TOKEN_IF)
+        {
+          if_count++;
+        }
+      else if (token.type == WPP_TOKEN_END)
+        {
+          if (if_count > 0)
+            if_count--;
+          else
+            {
+              break;
+            }
         }
     }
 
