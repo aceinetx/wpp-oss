@@ -24,5 +24,4 @@ Compilation requirements:
 - Makefile (optional, for incremental compiling)
 
 Roadmap:
-- Loops
 - Standard library (std, winapi, array, hashmap namespaces)
