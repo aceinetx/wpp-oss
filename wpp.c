@@ -46,6 +46,11 @@ main (int argc, char **argv)
                       (unsigned int)sizeof (wppToken));
               return 0;
             }
+          else
+            {
+              printf ("invalid argument: %s", arg);
+              return 1;
+            }
         }
       else
         filename = arg;
