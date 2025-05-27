@@ -4,7 +4,6 @@ fn main;
   var max = 5;
 
   loop;
-
     println "Count: $count^";
     var count + 1;
 
@@ -12,6 +11,7 @@ fn main;
     break
     end
 
+    println "End";
   lend;
 
   return 0;

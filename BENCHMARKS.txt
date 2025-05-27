@@ -8,6 +8,12 @@ Software:
   Kernel: Linux 6.13.3-arch1-1
 
 https://github.com/ViliowSs/1000-7-Watermelon-
+w/ diff:
+```
+9d8
+< sleep 0.2;
+```
+
   wpp-oss:
     0.004 seconds
   wpp-py:
