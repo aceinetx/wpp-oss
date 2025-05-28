@@ -8,9 +8,7 @@ bool
 wpp_do_print (wppExec *exec)
 {
   wppToken string;
-  char *c;
-  char *varname;
-  char *varname_c;
+  char *c, *varname, *varname_c;
 
   varname = NULL;
 
