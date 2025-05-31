@@ -6,6 +6,7 @@
 #include "exec_copy.c"
 #include "exec_fn.c"
 #include "exec_if.c"
+#include "exec_loop.c"
 #include "exec_misc.c"
 #include "exec_namespace.c"
 #include "exec_obj.c"
