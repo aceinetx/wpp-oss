@@ -1,8 +1,7 @@
 fn main;
 	var a = "Hello ";
-	var b = "World";
-	call std::stradd a b;
-	println "$ret^";
+	var a + "World";
+	println "$a^";
 
   return 0;
 nf;
