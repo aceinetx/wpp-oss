@@ -1,18 +1,8 @@
 fn main;
-
-  var count = 1;
-  var max = 5;
-
-  loop;
-    println "Count: $count^";
-    var count + 1;
-
-    if count >= 6
-    break
-    end
-
-    println "End";
-  lend;
+	var a = "Hello ";
+	var b = "World";
+	call std::stradd a b;
+	println "$ret^";
 
   return 0;
 nf;

@@ -1,6 +1,7 @@
 #include "exec.h"
 #include "lexer.h"
 #include <fcntl.h>
+#include <stdatomic.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -8,6 +9,8 @@
 #include <unistd.h>
 
 static void usage (void);
+
+static char *read_stdlib (void);
 
 int
 main (int argc, char **argv)
@@ -17,7 +20,7 @@ main (int argc, char **argv)
   FILE *file;
   int i, exit_level;
   struct stat stat;
-  char *code;
+  char *code, *stdlib;
   char *filename = NULL;
 
   exit_level = 0;
@@ -86,7 +89,19 @@ main (int argc, char **argv)
     }
 
   /* allocate memory for file contents */
-  code = (char *)malloc (stat.st_size);
+  if ((stdlib = read_stdlib ()))
+    {
+      size_t size = stat.st_size + strlen (stdlib) + 1;
+      code = (char *)malloc (size);
+      memset (code, 0, size);
+      strncpy (code, stdlib, size);
+    }
+  else
+    {
+      code = (char *)malloc (stat.st_size + 1);
+      memset (code, 0, stat.st_size + 1);
+    }
+
   if (!code)
     {
       perror ("wpp: malloc");
@@ -95,7 +110,8 @@ main (int argc, char **argv)
     }
 
   /* read entire file */
-  if (fread (code, 1, stat.st_size, file) != (size_t)stat.st_size)
+  if (fread ((stdlib ? code + strlen (stdlib) : code), 1, stat.st_size, file)
+      != (size_t)stat.st_size)
     {
       perror ("wpp: fread");
       free (code);
@@ -126,6 +142,11 @@ main (int argc, char **argv)
 
   /* free up the file buffer */
   free (code);
+
+  /* and the standard library */
+  if (stdlib)
+    free (stdlib);
+
   return exit_level;
 }
 
@@ -133,4 +154,48 @@ static void
 usage (void)
 {
   puts ("usage: wpp [filename] [options]...");
+}
+
+static char *
+read_stdlib (void)
+{
+  FILE *file;
+  struct stat stat;
+  char *code;
+
+  /* open the file */
+  file = fopen ("stdlib.wpp", "rb");
+  if (!file)
+    {
+      return NULL;
+    }
+
+  /* get file size */
+  if (fstat (fileno (file), &stat) == -1)
+    {
+      return NULL;
+    }
+
+  if (!stat.st_size)
+    {
+      return NULL;
+    }
+
+  /* allocate memory for file contents */
+  code = (char *)malloc (stat.st_size + 1);
+  if (!code)
+    {
+      return NULL;
+    }
+  memset (code, 0, stat.st_size + 1);
+
+  /* read entire file */
+  if (fread (code, 1, stat.st_size, file) != (size_t)stat.st_size)
+    {
+      return NULL;
+    }
+
+  fclose (file);
+
+  return code;
 }

@@ -273,6 +273,7 @@ wpp_lexer_next (wppLexer *lexer)
           DO_IDENTIFIR ("loop", WPP_TOKEN_LOOP);
           DO_IDENTIFIR ("lend", WPP_TOKEN_LEND);
           DO_IDENTIFIR ("break", WPP_TOKEN_BREAK);
+          DO_IDENTIFIR ("ccall", WPP_TOKEN_CCALL);
 #undef DO_IDENTIFIR
           if (token.type == WPP_TOKEN_IDENTIFIER)
             wpp_arena_append (&lexer->strings_arena, token.as.str);

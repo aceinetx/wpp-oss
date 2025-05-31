@@ -22,6 +22,7 @@ bool wpp_do_else (wppExec *exec);
 bool wpp_do_loop (wppExec *exec);
 bool wpp_do_lend (wppExec *exec);
 bool wpp_do_break (wppExec *exec);
+bool wpp_do_ccall (wppExec *exec);
 
 wppExec *
 wpp_exec_new (wppLexer *lexer)
@@ -118,6 +119,7 @@ wpp_exec_run (wppExec *exec)
           DO_TOKEN (WPP_TOKEN_LOOP, wpp_do_loop);
           DO_TOKEN (WPP_TOKEN_LEND, wpp_do_lend);
           DO_TOKEN (WPP_TOKEN_BREAK, wpp_do_break);
+          DO_TOKEN (WPP_TOKEN_CCALL, wpp_do_ccall);
         }
 
 #undef DO_TOKEN

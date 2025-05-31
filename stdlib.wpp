@@ -1,0 +1,7 @@
+namespace std;
+	fn stradd;
+		? here for python version compatibility reasons -?
+		cp ret arg1;
+		var ret + arg2;
+	nf;
+nsEnd;

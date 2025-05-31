@@ -54,6 +54,8 @@ enum wppTokenType
 
   WPP_TOKEN_CP,
 
+  WPP_TOKEN_CCALL,
+
   WPP_TOKEN_SEMICOLON
 };
 

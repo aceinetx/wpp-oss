@@ -1,5 +1,6 @@
 #include "exec.h"
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 bool
@@ -30,6 +31,23 @@ wpp_exec_obj_add (wppExec *exec, wppObject *obj, wppObject *other)
         obj->as._float += other->as._float;
       else
         snprintf (exec->error, sizeof (exec->error), "unsupported operation");
+    }
+  else if (obj->type == WPP_OBJ_STRING && other->type == WPP_OBJ_STRING)
+    {
+      size_t size;
+      char *new;
+
+      size = strlen (obj->as.string) + strlen (other->as.string) + 1;
+      new = malloc (size);
+
+      snprintf (new, size, "%s%s", obj->as.string, other->as.string);
+
+      wpp_arena_append (&exec->strings_arena, new);
+
+      obj->as.string = new;
+
+      /* TODO: implement a function in wppArena to free the old string right
+       there and not waste space */
     }
   else
     snprintf (exec->error, sizeof (exec->error), "unsupported operation");
