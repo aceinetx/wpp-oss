@@ -1,5 +1,6 @@
 #include "exec.h"
 #include <stdio.h>
+#include <string.h>
 
 bool wpp_do_nf (wppExec *exec);
 
@@ -40,5 +41,39 @@ wpp_do_return (wppExec *exec)
 
   wpp_exec_assign (exec, "ret", obj);
   wpp_do_nf (exec);
+  return true;
+}
+
+bool
+wpp_do_len (wppExec *exec)
+{
+  wppToken varname, strname;
+  wppObject *str, var;
+
+  varname = wpp_lexer_next (exec->lexer);
+  strname = wpp_lexer_next (exec->lexer);
+  DO_TEST_TOKEN (varname, WPP_TOKEN_IDENTIFIER);
+  DO_TEST_TOKEN (strname, WPP_TOKEN_IDENTIFIER);
+
+  str = wpp_exec_getvar (exec, strname.as.str);
+  if (!str)
+    {
+      snprintf (exec->error, sizeof (exec->error),
+                "len: undefined variable %s", strname.as.str);
+      return false;
+    }
+
+  if (str->type != WPP_OBJ_STRING)
+    {
+      snprintf (exec->error, sizeof (exec->error), "len: %s is not a string",
+                strname.as.str);
+      return false;
+    }
+
+  var.type = WPP_OBJ_INT;
+  var.as._int = strlen (str->as.string);
+
+  wpp_exec_assign (exec, varname.as.str, var);
+
   return true;
 }
