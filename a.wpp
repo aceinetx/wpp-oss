@@ -1,5 +1,4 @@
 fn main;
-
   var count = 1;
   var max = 5;
 
