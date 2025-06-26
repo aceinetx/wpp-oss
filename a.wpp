@@ -1,5 +1,7 @@
 fn main;
-	var s = "hEllo";
-	len l s;
-	println "$l^";
+	utime start;
+	sleep 5;
+	utime tend;
+	var tend - start;
+	println "$tend^";
 nf;

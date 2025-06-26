@@ -267,6 +267,9 @@ wpp_lexer_next (wppLexer *lexer)
           DO_IDENTIFIR ("len", WPP_TOKEN_LEN);
           DO_IDENTIFIR ("getchar", WPP_TOKEN_GETCHAR);
           DO_IDENTIFIR ("setchar", WPP_TOKEN_SETCHAR);
+          DO_IDENTIFIR ("exit", WPP_TOKEN_EXIT);
+          DO_IDENTIFIR ("sleep", WPP_TOKEN_SLEEP);
+          DO_IDENTIFIR ("utime", WPP_TOKEN_UTIME);
           DO_IDENTIFIR ("cast", WPP_TOKEN_CAST);
           DO_IDENTIFIR ("namespace", WPP_TOKEN_NAMESPACE);
           DO_IDENTIFIR ("nsEnd", WPP_TOKEN_NSEND);
