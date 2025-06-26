@@ -1,7 +1,0 @@
-fn main;
-	utime start;
-	sleep 5;
-	utime tend;
-	var tend - start;
-	println "$tend^";
-nf;
