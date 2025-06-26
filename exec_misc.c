@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <time.h>
 
-void usleep (unsigned long usec);
+int usleep (__useconds_t __useconds);
 
 bool wpp_do_nf (wppExec *exec);
 

@@ -12,6 +12,7 @@
 #include "exec_print.c"
 #include "exec_ret_stack.c"
 #include "exec_scanln.c"
+#include "exec_str.c"
 #include "exec_var.c"
 #include "lexer.c"
 #include "object.c"
