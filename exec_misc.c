@@ -31,7 +31,7 @@ wpp_do_return (wppExec *exec)
           return false;
         }
 
-      wpp_exec_obj_eq (exec, &obj, var, true);
+      wpp_exec_obj_eq (exec, &obj, var);
       break;
     default:
       snprintf (exec->error, sizeof (exec->error), "return: syntax error");

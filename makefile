@@ -1,7 +1,7 @@
 .PHONY: all 
 
 CC = cc
-CFLAGS = -std=c90 -Wall -Wextra -Wpedantic -Werror -Os -ggdb -fsanitize=address
+CFLAGS = -std=c90 -Wall -Wextra -Wpedantic -Werror -O0 -ggdb -fsanitize=address
 LDFLAGS = -lasan
 BUILDDIR = build/
 

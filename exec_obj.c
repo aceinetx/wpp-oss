@@ -12,16 +12,25 @@ memdup (const void *src, size_t size)
 }
 
 bool
-wpp_exec_obj_eq (wppExec *exec, wppObject *obj, wppObject *other, bool copy)
+wpp_exec_obj_eq (wppExec *exec, wppObject *obj, wppObject *other)
 {
+  char *name;
   (void)exec;
+  name = obj->name;
   memcpy (obj, other, sizeof (wppObject));
-  if (copy)
+  obj->name = name;
+  if (other->type == WPP_OBJ_ARRAY)
     {
-      if (other->type == WPP_OBJ_ARRAY)
+      unsigned int i;
+      obj->as.array.array
+          = memdup (other->as.array.array, other->as.array.size);
+      for (i = 0; i < other->as.array.length; i++)
         {
-          obj->as.array.array
-              = memdup (other->as.array.array, other->as.array.size);
+          if (other->as.array.array[i].type == WPP_OBJ_ARRAY)
+            {
+              wpp_exec_obj_eq (exec, &obj->as.array.array[i],
+                               &other->as.array.array[i]);
+            }
         }
     }
   return true;

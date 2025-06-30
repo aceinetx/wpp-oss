@@ -3,6 +3,7 @@
 
 enum
 {
+  WPP_OBJ_NULL,
   WPP_OBJ_INT,
   WPP_OBJ_FLOAT,
   WPP_OBJ_STRING,

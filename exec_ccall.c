@@ -102,8 +102,8 @@ wpp_do_ccall (wppExec *exec)
         if (!arr->as.array.array)
           MEM_ERR ();
 
-        wpp_exec_obj_eq (exec, &arr->as.array.array[arr->as.array.length], obj,
-                         true);
+        wpp_exec_obj_eq (exec, &arr->as.array.array[arr->as.array.length],
+                         obj);
         arr->as.array.length++;
         arr->as.array.size += sizeof (wppObject);
       }
@@ -209,8 +209,7 @@ wpp_do_ccall (wppExec *exec)
             return false;
           }
 
-        wpp_exec_obj_eq (exec, &arr->as.array.array[index->as._int], obj,
-                         true);
+        wpp_exec_obj_eq (exec, &arr->as.array.array[index->as._int], obj);
       }
       break;
     case CCALL_ARRAY_SIZE:
