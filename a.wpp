@@ -1,23 +1,4 @@
 fn main;
-  var count = 0;
-  call array::new "array";
-  call array::append "array" 4;
-  call array::append "array" 2;
-  call array::append "array" 6;
-  call array::append "array" 9;
-  
-  loop;
-
-    call array::get "array" count;
-    println "$count^ = $ret^";
-
-    var count + 1;
-    call array::size "array";
-    if count < ret
-    else
-    break;
-    end
-  
-  lend;
+	call winapi::MessageBox 0 "hi" "hi" 0;
   return 0;
 nf;

@@ -228,6 +228,7 @@ wpp_do_ccall (wppExec *exec)
       break;
     case CCALL_WINAPI_MESSAGEBOX:
       {
+#ifdef _WIN32
         wppObject *hwnd, *text, *caption, *type;
 
         GETVAR (hwnd, "arg1");
@@ -243,6 +244,11 @@ wpp_do_ccall (wppExec *exec)
         EXPECT_VAR_TYPE (type, WPP_OBJ_INT);
 
         // TODO: reboot to windows ssd and actually implement this
+#else
+        snprintf (exec->error, sizeof (exec->error),
+                  "ccall: winapi::MessageBox is only available on windows");
+        return false;
+#endif
       }
       break;
     default:
