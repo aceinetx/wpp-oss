@@ -1,8 +1,8 @@
 .PHONY: all 
 
 CC = cc
-CFLAGS = -std=c90 -Wall -Wextra -Wpedantic -Werror -Os -ggdb
-LDFLAGS =
+CFLAGS = -std=c90 -Wall -Wextra -Wpedantic -Werror -Os -ggdb -fsanitize=address
+LDFLAGS = -lasan
 BUILDDIR = build/
 
 all: $(BUILDDIR) $(BUILDDIR)wpp
