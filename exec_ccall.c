@@ -139,6 +139,49 @@ wpp_do_ccall (wppExec *exec)
         wpp_exec_assign (exec, "ret", obj);
       }
       break;
+    case CCALL_ARRAY_DELETE:
+      {
+        wppObject *name, *arr, *index;
+        unsigned int i;
+
+        GETVAR (name, "arg1");
+        EXPECT_VAR_TYPE (name, WPP_OBJ_STRING);
+
+        GETVAR (arr, name->as.string);
+        EXPECT_VAR_TYPE (arr, WPP_OBJ_ARRAY);
+
+        GETVAR (index, "arg2");
+        EXPECT_VAR_TYPE (index, WPP_OBJ_INT);
+
+        if (index->as._int >= (int)arr->as.array.length || index->as._int < 0)
+          {
+            snprintf (exec->error, sizeof (exec->error),
+                      "ccall: index %d is outside of bounds of an array with "
+                      "length %d",
+                      index->as._int, arr->as.array.length);
+            return false;
+          }
+
+        for (i = index->as._int; i < arr->as.array.length - 1; i++)
+          {
+            (arr->as.array.array)[i] = (arr->as.array.array)[i + 1];
+          }
+
+        if (arr->as.array.length == 1)
+          {
+            free (arr->as.array.array);
+            arr->as.array.array = NULL;
+          }
+        else
+          {
+            arr->as.array.array = realloc (
+                arr->as.array.array, arr->as.array.size - sizeof (wppObject));
+          }
+
+        arr->as.array.size -= sizeof (wppObject);
+        arr->as.array.length--;
+      }
+      break;
     case CCALL_ARRAY_SET:
       {
         wppObject *name, *arr, *index, *obj;

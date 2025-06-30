@@ -20,7 +20,7 @@ namespace array;
 		ccall 4;
 	nf;
 	fn delete; 
-		println "array::delete not implemented";
+		ccall 5;
 	nf;
 	fn set;
 		ccall 6;
