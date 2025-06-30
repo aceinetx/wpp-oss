@@ -29,3 +29,9 @@ namespace array;
 		ccall 7;
 	nf;
 nsEnd;
+
+namespace winapi;
+	fn MessageBox;
+		ccall 8;
+	nf;
+nsEnd;

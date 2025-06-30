@@ -9,7 +9,8 @@ enum
   CCALL_ARRAY_POP,
   CCALL_ARRAY_DELETE,
   CCALL_ARRAY_SET,
-  CCALL_ARRAY_SIZE
+  CCALL_ARRAY_SIZE,
+  CCALL_WINAPI_MESSAGEBOX
 };
 
 bool
@@ -223,6 +224,25 @@ wpp_do_ccall (wppExec *exec)
         obj.as._int = arr->as.array.length;
 
         wpp_exec_assign (exec, "ret", obj);
+      }
+      break;
+    case CCALL_WINAPI_MESSAGEBOX:
+      {
+        wppObject *hwnd, *text, *caption, *type;
+
+        GETVAR (hwnd, "arg1");
+        EXPECT_VAR_TYPE (hwnd, WPP_OBJ_INT);
+
+        GETVAR (text, "arg2");
+        EXPECT_VAR_TYPE (text, WPP_OBJ_STRING);
+
+        GETVAR (caption, "arg3");
+        EXPECT_VAR_TYPE (caption, WPP_OBJ_STRING);
+
+        GETVAR (type, "arg4");
+        EXPECT_VAR_TYPE (type, WPP_OBJ_INT);
+
+        // TODO: reboot to windows ssd and actually implement this
       }
       break;
     default:
