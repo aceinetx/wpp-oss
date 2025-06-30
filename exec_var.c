@@ -27,7 +27,7 @@ wpp_exec_assign (wppExec *exec, const char *name, wppObject object)
       if (strcmp (obj->name, name) == 0)
         {
           char *old_name = obj->name;
-          memcpy (obj, &object, sizeof (wppObject));
+          wpp_exec_obj_eq (exec, obj, &object, true);
           obj->name = old_name;
           return obj;
         }
@@ -36,7 +36,7 @@ wpp_exec_assign (wppExec *exec, const char *name, wppObject object)
   /* didn't find a variable: create it */
   {
     wppObject *obj_alloc = malloc (sizeof (wppObject));
-    memcpy (obj_alloc, &object, sizeof (wppObject));
+    wpp_exec_obj_eq (exec, obj_alloc, &object, true);
     obj_alloc->name = strdup (name);
 
     wpp_arena_append (&exec->strings_arena, obj_alloc->name);
@@ -84,7 +84,7 @@ wpp_do_var (wppExec *exec)
           return false;
         }
 
-      wpp_exec_obj_eq (exec, &object, var);
+      wpp_exec_obj_eq (exec, &object, var, true);
       break;
     case WPP_TOKEN_STRING:
       object.type = WPP_OBJ_STRING;
@@ -106,7 +106,7 @@ wpp_do_var (wppExec *exec)
     {
     case WPP_TOKEN_EQ:
       if (var)
-        if (!wpp_exec_obj_eq (exec, var, &object))
+        if (!wpp_exec_obj_eq (exec, var, &object, true))
           return false;
       break;
     case WPP_TOKEN_ADD:

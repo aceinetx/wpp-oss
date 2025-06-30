@@ -117,7 +117,7 @@ wpp_do_call (wppExec *exec)
               return false;
             }
 
-          wpp_exec_obj_eq (exec, &arg_var, var);
+          wpp_exec_obj_eq (exec, &arg_var, var, false);
         }
       else
         {

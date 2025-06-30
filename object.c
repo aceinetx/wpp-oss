@@ -1,6 +1,8 @@
 #include "object.h"
 #include <stddef.h>
+#include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 void
 wppObject_free (wppObject *obj)
@@ -8,6 +10,17 @@ wppObject_free (wppObject *obj)
   if (obj->type == WPP_OBJ_ARRAY)
     {
       if (obj->as.array.array != NULL)
-        free (obj->as.array.array);
+        {
+          unsigned int i;
+          /* printf ("%p %s\n", (void *)obj->as.array.array, obj->name); */
+          for (i = 0; i < obj->as.array.length; i++)
+            {
+              if (obj->as.array.array[i].type == WPP_OBJ_ARRAY)
+                {
+                  wppObject_free (&obj->as.array.array[i]);
+                }
+            }
+          free (obj->as.array.array);
+        }
     }
 }

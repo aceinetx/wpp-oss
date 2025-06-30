@@ -60,8 +60,9 @@ wpp_exec_free (wppExec *exec)
   for (i = 0; i < exec->objects_arena.length; i++)
     {
       wppObject_free (exec->objects_arena.data[i]);
+      free (exec->objects_arena.data[i]);
     }
-  wpp_arena_free (&exec->objects_arena);
+  free (exec->objects_arena.data);
 
   wpp_arena_free (&exec->strings_arena);
   free (exec);

@@ -3,11 +3,27 @@
 #include <stdlib.h>
 #include <string.h>
 
+static void *
+memdup (const void *src, size_t size)
+{
+  void *dest = malloc (size);
+  memcpy (dest, src, size);
+  return dest;
+}
+
 bool
-wpp_exec_obj_eq (wppExec *exec, wppObject *obj, wppObject *other)
+wpp_exec_obj_eq (wppExec *exec, wppObject *obj, wppObject *other, bool copy)
 {
   (void)exec;
   memcpy (obj, other, sizeof (wppObject));
+  if (copy)
+    {
+      if (other->type == WPP_OBJ_ARRAY)
+        {
+          obj->as.array.array
+              = memdup (other->as.array.array, other->as.array.size);
+        }
+    }
   return true;
 }
 

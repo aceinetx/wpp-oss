@@ -28,7 +28,8 @@ wpp_do_ccall (wppExec *exec)
   if (obj->type != t)                                                         \
     {                                                                         \
       snprintf (exec->error, sizeof (exec->error),                            \
-                "ccall: invalid type for %s", obj->name);                     \
+                "ccall: invalid type for %s (%d, %d)", obj->name, t,          \
+                obj->type);                                                   \
       return false;                                                           \
     }
 #define GETVAR(var, name)                                                     \
@@ -101,7 +102,8 @@ wpp_do_ccall (wppExec *exec)
         if (!arr->as.array.array)
           MEM_ERR ();
 
-        arr->as.array.array[arr->as.array.length] = *obj;
+        wpp_exec_obj_eq (exec, &arr->as.array.array[arr->as.array.length], obj,
+                         true);
         arr->as.array.length++;
         arr->as.array.size += sizeof (wppObject);
       }
@@ -207,7 +209,8 @@ wpp_do_ccall (wppExec *exec)
             return false;
           }
 
-        arr->as.array.array[index->as._int] = *obj;
+        wpp_exec_obj_eq (exec, &arr->as.array.array[index->as._int], obj,
+                         true);
       }
       break;
     case CCALL_ARRAY_SIZE:

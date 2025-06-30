@@ -60,7 +60,8 @@ unsigned int wpp_exec_pop_ret_stack (wppExec *exec);
 
 void wpp_exec_run (wppExec *exec);
 
-bool wpp_exec_obj_eq (wppExec *exec, wppObject *obj, wppObject *other);
+bool wpp_exec_obj_eq (wppExec *exec, wppObject *obj, wppObject *other,
+                      bool copy);
 bool wpp_exec_obj_add (wppExec *exec, wppObject *obj, wppObject *other);
 bool wpp_exec_obj_sub (wppExec *exec, wppObject *obj, wppObject *other);
 bool wpp_exec_obj_mul (wppExec *exec, wppObject *obj, wppObject *other);

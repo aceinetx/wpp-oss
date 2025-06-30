@@ -4,6 +4,51 @@
 #include <stdlib.h>
 #include <string.h>
 
+static void
+wpp_print_object (wppObject *var, bool raw)
+{
+  switch (var->type)
+    {
+    case WPP_OBJ_INT:
+      printf ("%d", var->as._int);
+      break;
+    case WPP_OBJ_FLOAT:
+      printf ("%f", var->as._float);
+      break;
+    case WPP_OBJ_STRING:
+      if (raw)
+        printf ("\"%s\"", var->as.string);
+      else
+        printf ("%s", var->as.string);
+      break;
+    case WPP_OBJ_FUNCTION:
+      printf ("<function %s at %p>", var->name, (void *)var);
+      break;
+    case WPP_OBJ_ARRAY:
+      {
+        unsigned int i;
+        /*
+  printf ("<array %s (%p) of len %u>", var->name,
+  (void *)var->as.array.array, var->as.array.length);
+                                        */
+        printf ("{");
+        for (i = 0; i < var->as.array.length; i++)
+          {
+            wpp_print_object (&var->as.array.array[i], true);
+            if (i < var->as.array.length - 1)
+              {
+                printf (", ");
+              }
+          }
+        printf ("}");
+      }
+      break;
+    default:
+      printf ("<%s of type %d>", var->name, var->type);
+      break;
+    }
+}
+
 bool
 wpp_do_print (wppExec *exec)
 {
@@ -48,28 +93,10 @@ wpp_do_print (wppExec *exec)
           var = wpp_exec_getvar (exec, varname);
           if (var)
             {
-              switch (var->type)
-                {
-                case WPP_OBJ_INT:
-                  printf ("%d", var->as._int);
-                  break;
-                case WPP_OBJ_FLOAT:
-                  printf ("%f", var->as._float);
-                  break;
-                case WPP_OBJ_STRING:
-                  printf ("%s", var->as.string);
-                  break;
-                case WPP_OBJ_FUNCTION:
-                  printf ("<function %s at %p>", varname, (void *)var);
-                  break;
-                case WPP_OBJ_ARRAY:
-                  printf ("<array %s (%p) of len %u>", varname,
-                          (void *)var->as.array.array, var->as.array.length);
-                  break;
-                default:
-                  printf ("<%s of type %d>", varname, var->type);
-                  break;
-                }
+              if (var->type == WPP_OBJ_ARRAY)
+                wpp_print_object (var, true);
+              else
+                wpp_print_object (var, false);
             }
           else
             {
