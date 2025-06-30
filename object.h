@@ -6,10 +6,11 @@ enum
   WPP_OBJ_INT,
   WPP_OBJ_FLOAT,
   WPP_OBJ_STRING,
-  WPP_OBJ_FUNCTION
+  WPP_OBJ_FUNCTION,
+  WPP_OBJ_ARRAY
 };
 
-typedef struct
+typedef struct wppObject
 {
   unsigned char type;
 
@@ -20,6 +21,13 @@ typedef struct
       unsigned int pos;
     } function;
 
+    struct
+    {
+      unsigned int size;
+      unsigned int length;
+      struct wppObject *array;
+    } array;
+
     int _int;
     float _float;
     char *string;
@@ -27,5 +35,7 @@ typedef struct
 
   char *name;
 } wppObject;
+
+void wppObject_free (wppObject *obj);
 
 #endif

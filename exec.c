@@ -49,12 +49,20 @@ wpp_exec_new (wppLexer *lexer)
 void
 wpp_exec_free (wppExec *exec)
 {
+  size_t i;
+
   if (exec->vars)
     {
       free (exec->vars);
     }
 
+  /* free each object individually by wppObject_free */
+  for (i = 0; i < exec->objects_arena.length; i++)
+    {
+      wppObject_free (exec->objects_arena.data[i]);
+    }
   wpp_arena_free (&exec->objects_arena);
+
   wpp_arena_free (&exec->strings_arena);
   free (exec);
 }
@@ -80,6 +88,8 @@ wpp_exec_fcall (wppExec *exec, const char *name)
             }
         }
     }
+  snprintf (exec->error, sizeof (exec->error), "fcall: undefined function %s",
+            name);
   return FCALL_FAIL;
 }
 

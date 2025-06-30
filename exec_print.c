@@ -62,6 +62,10 @@ wpp_do_print (wppExec *exec)
                 case WPP_OBJ_FUNCTION:
                   printf ("<function %s at %p>", varname, (void *)var);
                   break;
+                case WPP_OBJ_ARRAY:
+                  printf ("<array %s (%p) of len %u>", varname,
+                          (void *)var->as.array.array, var->as.array.length);
+                  break;
                 default:
                   printf ("<%s of type %d>", varname, var->type);
                   break;

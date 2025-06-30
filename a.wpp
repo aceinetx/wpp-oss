@@ -1,7 +1,10 @@
 fn main;
-	var a = "Hello ";
-	var a + "World";
-	println "$a^";
-
+	call array::new "arr";
+	call array::append "arr" "Hello, World!";
+	call array::append "arr" "Hello, there!";
+	call array::pop "arr";
+	println "$ret^";
+	call array::get "arr" 0;
+	println "$ret^";
   return 0;
 nf;
