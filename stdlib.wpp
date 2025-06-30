@@ -23,7 +23,7 @@ namespace array;
 		println "array::delete not implemented";
 	nf;
 	fn set;
-		println "array::set not implemented";
+		ccall 6;
 	nf;
 	fn size;
 		ccall 7;

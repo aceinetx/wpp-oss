@@ -1,7 +1,9 @@
 fn main;
 	call array::new "arr";
 	call array::append "arr" "Hello, World!";
-	call array::append "arr" "Hello, there!";
+	call array::set "arr" 0 "Hello, there!";
+	call array::get "arr" 0;
+	println "$ret^";
 	call array::size "arr";
 	println "$ret^";
   return 0;
