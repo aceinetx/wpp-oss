@@ -1,5 +1,6 @@
 wpp
-*.wpp
-*.o
 build
+*.o
+*.wpp
+*core.*
 
