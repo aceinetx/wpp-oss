@@ -90,6 +90,8 @@ typedef struct
   unsigned int line;
 } wppLexer;
 
+/* TODO: Get the fuck rid of the consistent allocations on identifiers and
+strings, this leaks so much memory i'm bouta throw up */
 wppLexer *wpp_lexer_new (char *code);
 void wpp_lexer_free (wppLexer *lexer);
 
