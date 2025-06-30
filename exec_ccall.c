@@ -7,7 +7,9 @@ enum
   CCALL_ARRAY_GET,
   CCALL_ARRAY_APPEND,
   CCALL_ARRAY_POP,
-  CCALL_ARRAY_DELETE
+  CCALL_ARRAY_DELETE,
+  CCALL_ARRAY_SET,
+  CCALL_ARRAY_SIZE
 };
 
 bool
@@ -137,6 +139,26 @@ wpp_do_ccall (wppExec *exec)
         wpp_exec_assign (exec, "ret", obj);
       }
       break;
+    case CCALL_ARRAY_SIZE:
+      {
+        wppObject *name, *arr, obj;
+
+        GETVAR (name, "arg1");
+        EXPECT_VAR_TYPE (name, WPP_OBJ_STRING);
+
+        GETVAR (arr, name->as.string);
+        EXPECT_VAR_TYPE (arr, WPP_OBJ_ARRAY);
+
+        obj.type = WPP_OBJ_INT;
+        obj.as._int = arr->as.array.length;
+
+        wpp_exec_assign (exec, "ret", obj);
+      }
+      break;
+    default:
+      snprintf (exec->error, sizeof (exec->error),
+                "ccall: unknown ccall index: %d", id);
+      return false;
     }
   return true;
 }

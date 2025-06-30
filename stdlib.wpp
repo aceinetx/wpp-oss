@@ -26,6 +26,6 @@ namespace array;
 		println "array::set not implemented";
 	nf;
 	fn size;
-		println "array::size not implemented";
+		ccall 7;
 	nf;
 nsEnd;
