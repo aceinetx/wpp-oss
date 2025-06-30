@@ -1,0 +1,37 @@
+namespace std;
+	fn stradd;
+		? here for python version compatibility reasons -?
+		cp ret arg1;
+		var ret + arg2;
+	nf;
+nsEnd;
+
+namespace array;
+	fn new; 
+		ccall 1;
+	nf;
+	fn get; 
+		ccall 2;
+	nf;
+	fn append; 
+		ccall 3;
+	nf;
+	fn pop; 
+		ccall 4;
+	nf;
+	fn delete; 
+		ccall 5;
+	nf;
+	fn set;
+		ccall 6;
+	nf;
+	fn size;
+		ccall 7;
+	nf;
+nsEnd;
+
+namespace winapi;
+	fn MessageBox;
+		ccall 8;
+	nf;
+nsEnd;

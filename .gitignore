@@ -3,4 +3,4 @@ build
 *.o
 *.wpp
 *core.*
-
+!stdlib.wpp
