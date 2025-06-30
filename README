@@ -14,9 +14,10 @@ The code is mostly the same as in the original python version, but a lot of stuf
 
 Tested systems:
 - Arch linux
-- Android 10 (Termux)
 - Arch linux (Windows 11 WSL)
+- Android 10 (Termux)
 - Windows 11 (msys2 ucrt64)
+- Nintendo Switch v1 (w/ devkitpro)
 
 Compilation requirements:
 - C compiler compatible with ANSI C (C89/C90)
