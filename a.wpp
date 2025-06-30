@@ -1,4 +1,0 @@
-fn main;
-	call winapi::MessageBox 0 "hi" "hi" 0;
-  return 0;
-nf;
