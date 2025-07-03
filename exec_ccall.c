@@ -1,6 +1,10 @@
 #include "exec.h"
 #include <stdlib.h>
 
+#ifdef _WIN32
+#include <Windows.h>
+#endif
+
 enum
 {
   CCALL_ARRAY_NEW = 1,
@@ -249,7 +253,7 @@ wpp_do_ccall (wppExec *exec)
         GETVAR (type, "arg4");
         EXPECT_VAR_TYPE (type, WPP_OBJ_INT);
 
-        // TODO: reboot to windows ssd and actually implement this
+	MessageBoxA((HWND)(uint64_t)hwnd->as._int, text->as.string, caption->as.string, (UINT)type->as._int);
 #else
         snprintf (exec->error, sizeof (exec->error),
                   "ccall: winapi::MessageBox is only available on windows");
