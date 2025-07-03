@@ -1,8 +1,7 @@
-/* cc -std=c90 -Wall -Wextra -o wpp onewpp.c */
+/* cc -std=c90 -Wall -Wextra -o libwpp.so onelibwpp.c -fpic -shared */
 #include "arena.c"
 #include "exec.c"
 #include "exec_cast.c"
-#include "exec_ccall.c"
 #include "exec_copy.c"
 #include "exec_fn.c"
 #include "exec_if.c"
@@ -17,4 +16,3 @@
 #include "exec_var.c"
 #include "lexer.c"
 #include "object.c"
-#include "wpp.c"

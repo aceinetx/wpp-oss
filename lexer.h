@@ -24,6 +24,14 @@ enum wppTokenType
   WPP_TOKEN_RETURN,
   WPP_TOKEN_CAST,
 
+  WPP_TOKEN_LEN,
+  WPP_TOKEN_GETCHAR,
+  WPP_TOKEN_SETCHAR,
+
+  WPP_TOKEN_EXIT,
+  WPP_TOKEN_SLEEP,
+  WPP_TOKEN_UTIME,
+
   WPP_TOKEN_NAMESPACE,
   WPP_TOKEN_NSEND,
 
@@ -84,6 +92,8 @@ typedef struct
   unsigned int line;
 } wppLexer;
 
+/* TODO: Get the fuck rid of the consistent allocations on identifiers and
+strings, this leaks so much memory i'm bouta throw up */
 wppLexer *wpp_lexer_new (char *code);
 void wpp_lexer_free (wppLexer *lexer);
 

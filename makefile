@@ -12,7 +12,7 @@ clean:
 $(BUILDDIR):
 	mkdir -p $(BUILDDIR)
 
-$(BUILDDIR)wpp: $(BUILDDIR)wpp.o $(BUILDDIR)lexer.o $(BUILDDIR)arena.o $(BUILDDIR)exec.o $(BUILDDIR)object.o $(BUILDDIR)exec_print.o $(BUILDDIR)exec_fn.o $(BUILDDIR)exec_var.o $(BUILDDIR)exec_copy.o $(BUILDDIR)exec_scanln.o $(BUILDDIR)exec_ret_stack.o $(BUILDDIR)exec_obj.o $(BUILDDIR)exec_misc.o $(BUILDDIR)exec_cast.o $(BUILDDIR)exec_namespace.o $(BUILDDIR)exec_if.o $(BUILDDIR)exec_loop.o $(BUILDDIR)exec_ccall.o
+$(BUILDDIR)wpp: $(BUILDDIR)wpp.o $(BUILDDIR)lexer.o $(BUILDDIR)arena.o $(BUILDDIR)exec.o $(BUILDDIR)object.o $(BUILDDIR)exec_print.o $(BUILDDIR)exec_fn.o $(BUILDDIR)exec_var.o $(BUILDDIR)exec_copy.o $(BUILDDIR)exec_scanln.o $(BUILDDIR)exec_ret_stack.o $(BUILDDIR)exec_obj.o $(BUILDDIR)exec_misc.o $(BUILDDIR)exec_cast.o $(BUILDDIR)exec_namespace.o $(BUILDDIR)exec_if.o $(BUILDDIR)exec_loop.o $(BUILDDIR)exec_str.o $(BUILDDIR)exec_ccall.o
 	$(CC) $(LDFLAGS) -o $@ $^
 
 # objects
@@ -62,6 +62,9 @@ $(BUILDDIR)exec_if.o: exec_if.c exec.h
 	$(CC) -c -o $@ $(CFLAGS) $<
 
 $(BUILDDIR)exec_loop.o: exec_loop.c exec.h
+	$(CC) -c -o $@ $(CFLAGS) $<
+
+$(BUILDDIR)exec_str.o: exec_str.c exec.h
 	$(CC) -c -o $@ $(CFLAGS) $<
 
 $(BUILDDIR)exec_ccall.o: exec_ccall.c exec.h
