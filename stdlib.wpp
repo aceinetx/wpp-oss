@@ -35,3 +35,18 @@ namespace winapi;
 		ccall 8;
 	nf;
 nsEnd;
+
+namespace hashmap;
+	fn new;
+		ccall 9;
+	nf;
+	fn set;
+		ccall 10;
+	nf;
+	fn get;
+		ccall 11;
+	nf;
+	fn delete;
+		ccall 12;
+	nf;
+nsEnd;

@@ -10,7 +10,11 @@ enum
   CCALL_ARRAY_DELETE,
   CCALL_ARRAY_SET,
   CCALL_ARRAY_SIZE,
-  CCALL_WINAPI_MESSAGEBOX
+  CCALL_WINAPI_MESSAGEBOX,
+  CCALL_HASHMAP_NEW,
+  CCALL_HASHMAP_SET,
+  CCALL_HASHMAP_GET,
+  CCALL_HASHMAP_DELETE,
 };
 
 bool
@@ -251,6 +255,30 @@ wpp_do_ccall (wppExec *exec)
                   "ccall: winapi::MessageBox is only available on windows");
         return false;
 #endif
+      }
+      break;
+    case CCALL_HASHMAP_NEW:
+      {
+        puts ("ccall: not implemented");
+        return false;
+      }
+      break;
+    case CCALL_HASHMAP_SET:
+      {
+        puts ("ccall: not implemented");
+        return false;
+      }
+      break;
+    case CCALL_HASHMAP_GET:
+      {
+        puts ("ccall: not implemented");
+        return false;
+      }
+      break;
+    case CCALL_HASHMAP_DELETE:
+      {
+        puts ("ccall: not implemented");
+        return false;
       }
       break;
     default:
