@@ -74,5 +74,5 @@ $(BUILDDIR)object.o: object.c object.h
 lexer.h: arena.h
 	@touch $@
 
-exec.h: lexer.h object.h wpp.h cfwd.h
+exec.h: cfwd.h lexer.h object.h wpp.h 
 	@touch $@
