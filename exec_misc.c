@@ -2,7 +2,11 @@
 #include <stdio.h>
 #include <time.h>
 
+#ifndef _WIN32
 int usleep (__useconds_t __useconds);
+#else
+#include <Windows.h>
+#endif
 
 bool wpp_do_nf (wppExec *exec);
 
@@ -107,14 +111,14 @@ wpp_do_sleep (wppExec *exec)
         if (!var)
           {
             snprintf (exec->error, sizeof (exec->error),
-                      "exit: undefined variable %s", secs_tok.as.str);
+                      "sleep: undefined variable %s", secs_tok.as.str);
             return false;
           }
 
         if (var->type != WPP_OBJ_INT && var->type != WPP_OBJ_FLOAT)
           {
             snprintf (exec->error, sizeof (exec->error),
-                      "exit: %s is not an integer or a float",
+                      "sleep: %s is not an integer or a float",
                       secs_tok.as.str);
             return false;
           }
@@ -132,12 +136,15 @@ wpp_do_sleep (wppExec *exec)
       seconds = secs_tok.as.fnumber;
       break;
     default:
-      snprintf (exec->error, sizeof (exec->error), "exit: syntax error");
+      snprintf (exec->error, sizeof (exec->error), "sleep: syntax error");
       return false;
     }
 
+#ifndef _WIN32
   usleep (seconds * 1000000);
-
+#else
+  Sleep((int)(seconds * 1000));
+#endif
   return true;
 }
 
