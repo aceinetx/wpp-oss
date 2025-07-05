@@ -22,14 +22,28 @@ wpp_exec_obj_eq (wppExec *exec, wppObject *obj, wppObject *other)
   if (other->type == WPP_OBJ_ARRAY)
     {
       unsigned int i;
-      obj->as.array.array
-          = memdup (other->as.array.array, other->as.array.size);
+      obj->as.array.data = memdup (other->as.array.data, other->as.array.size);
       for (i = 0; i < other->as.array.length; i++)
         {
-          if (other->as.array.array[i].type == WPP_OBJ_ARRAY)
+          if (other->as.array.data[i].type == WPP_OBJ_ARRAY)
             {
-              wpp_exec_obj_eq (exec, &obj->as.array.array[i],
-                               &other->as.array.array[i]);
+              wpp_exec_obj_eq (exec, &obj->as.array.data[i],
+                               &other->as.array.data[i]);
+            }
+        }
+    }
+  else if (other->type == WPP_OBJ_HASHMAP)
+    {
+      unsigned int i;
+      obj->as.array.data
+          = memdup (other->as.hashmap.data, other->as.hashmap.size);
+      for (i = 0; i < other->as.hashmap.length; i++)
+        {
+          if (other->as.hashmap.data[i].as.hashmap_entry.obj != NULL)
+            {
+              wpp_exec_obj_eq (exec,
+                               obj->as.hashmap.data[i].as.hashmap_entry.obj,
+                               other->as.hashmap.data[i].as.hashmap_entry.obj);
             }
         }
     }

@@ -64,7 +64,7 @@ wpp_do_ccall (wppExec *exec)
         arr.type = WPP_OBJ_ARRAY;
         arr.as.array.length = 0;
         arr.as.array.size = 0;
-        arr.as.array.array = NULL;
+        arr.as.array.data = NULL;
         wpp_exec_assign (exec, name->as.string, arr);
       }
       break;
@@ -90,7 +90,7 @@ wpp_do_ccall (wppExec *exec)
             return false;
           }
 
-        wpp_exec_assign (exec, "ret", arr->as.array.array[index->as._int]);
+        wpp_exec_assign (exec, "ret", arr->as.array.data[index->as._int]);
       }
       break;
     case CCALL_ARRAY_APPEND:
@@ -105,13 +105,12 @@ wpp_do_ccall (wppExec *exec)
 
         GETVAR (obj, "arg2");
 
-        arr->as.array.array = realloc (
-            arr->as.array.array, arr->as.array.size + sizeof (wppObject));
-        if (!arr->as.array.array)
+        arr->as.array.data = realloc (arr->as.array.data,
+                                      arr->as.array.size + sizeof (wppObject));
+        if (!arr->as.array.data)
           MEM_ERR ();
 
-        wpp_exec_obj_eq (exec, &arr->as.array.array[arr->as.array.length],
-                         obj);
+        wpp_exec_obj_eq (exec, &arr->as.array.data[arr->as.array.length], obj);
         arr->as.array.length++;
         arr->as.array.size += sizeof (wppObject);
       }
@@ -133,16 +132,16 @@ wpp_do_ccall (wppExec *exec)
             return false;
           }
 
-        obj = arr->as.array.array[arr->as.array.length - 1];
+        obj = arr->as.array.data[arr->as.array.length - 1];
         if (arr->as.array.length == 1)
           {
-            free (arr->as.array.array);
-            arr->as.array.array = NULL;
+            free (arr->as.array.data);
+            arr->as.array.data = NULL;
           }
         else
           {
-            arr->as.array.array = realloc (
-                arr->as.array.array, arr->as.array.size - sizeof (wppObject));
+            arr->as.array.data = realloc (
+                arr->as.array.data, arr->as.array.size - sizeof (wppObject));
           }
         arr->as.array.length--;
         arr->as.array.size -= sizeof (wppObject);
@@ -175,18 +174,18 @@ wpp_do_ccall (wppExec *exec)
 
         for (i = index->as._int; i < arr->as.array.length - 1; i++)
           {
-            (arr->as.array.array)[i] = (arr->as.array.array)[i + 1];
+            (arr->as.array.data)[i] = (arr->as.array.data)[i + 1];
           }
 
         if (arr->as.array.length == 1)
           {
-            free (arr->as.array.array);
-            arr->as.array.array = NULL;
+            free (arr->as.array.data);
+            arr->as.array.data = NULL;
           }
         else
           {
-            arr->as.array.array = realloc (
-                arr->as.array.array, arr->as.array.size - sizeof (wppObject));
+            arr->as.array.data = realloc (
+                arr->as.array.data, arr->as.array.size - sizeof (wppObject));
           }
 
         arr->as.array.size -= sizeof (wppObject);
@@ -217,7 +216,7 @@ wpp_do_ccall (wppExec *exec)
             return false;
           }
 
-        wpp_exec_obj_eq (exec, &arr->as.array.array[index->as._int], obj);
+        wpp_exec_obj_eq (exec, &arr->as.array.data[index->as._int], obj);
       }
       break;
     case CCALL_ARRAY_SIZE:
@@ -253,7 +252,8 @@ wpp_do_ccall (wppExec *exec)
         GETVAR (type, "arg4");
         EXPECT_VAR_TYPE (type, WPP_OBJ_INT);
 
-	MessageBoxA((HWND)(uint64_t)hwnd->as._int, text->as.string, caption->as.string, (UINT)type->as._int);
+        MessageBoxA ((HWND)(uint64_t)hwnd->as._int, text->as.string,
+                     caption->as.string, (UINT)type->as._int);
 #else
         snprintf (exec->error, sizeof (exec->error),
                   "ccall: winapi::MessageBox is only available on windows");
@@ -263,13 +263,22 @@ wpp_do_ccall (wppExec *exec)
       break;
     case CCALL_HASHMAP_NEW:
       {
-        puts ("ccall: not implemented");
+        wppObject *name, arr;
+        GETVAR (name, "arg1");
+        EXPECT_VAR_TYPE (name, WPP_OBJ_STRING);
+
+        arr.type = WPP_OBJ_HASHMAP;
+        arr.as.array.length = 0;
+        arr.as.array.size = 0;
+        arr.as.array.data = NULL;
+        wpp_exec_assign (exec, name->as.string, arr);
         return false;
       }
       break;
     case CCALL_HASHMAP_SET:
       {
         puts ("ccall: not implemented");
+
         return false;
       }
       break;

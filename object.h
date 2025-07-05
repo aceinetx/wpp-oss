@@ -8,7 +8,9 @@ enum
   WPP_OBJ_FLOAT,
   WPP_OBJ_STRING,
   WPP_OBJ_FUNCTION,
-  WPP_OBJ_ARRAY
+  WPP_OBJ_ARRAY,
+  WPP_OBJ_HASHMAP,
+  WPP_OBJ_HASHMAP_ENTRY
 };
 
 typedef struct wppObject
@@ -26,8 +28,21 @@ typedef struct wppObject
     {
       unsigned int size;
       unsigned int length;
-      struct wppObject *array;
+      struct wppObject *data;
     } array;
+
+    struct
+    {
+      unsigned int size;
+      unsigned int length;
+      struct wppObject *data;
+    } hashmap;
+
+    struct
+    {
+      char *key;
+      struct wppObject *obj;
+    } hashmap_entry;
 
     int _int;
     float _float;

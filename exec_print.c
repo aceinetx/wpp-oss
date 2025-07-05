@@ -34,7 +34,7 @@ wpp_print_object (wppObject *var, bool raw)
         printf ("{");
         for (i = 0; i < var->as.array.length; i++)
           {
-            wpp_print_object (&var->as.array.array[i], true);
+            wpp_print_object (&var->as.array.data[i], true);
             if (i < var->as.array.length - 1)
               {
                 printf (", ");
