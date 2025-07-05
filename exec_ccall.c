@@ -277,8 +277,38 @@ wpp_do_ccall (wppExec *exec)
       break;
     case CCALL_HASHMAP_SET:
       {
-        puts ("ccall: not implemented");
-        return false;
+        wppObject *name, *map, *key, *obj;
+
+        GETVAR (name, "arg1");
+        EXPECT_VAR_TYPE (name, WPP_OBJ_STRING);
+
+        GETVAR (map, name->as.string);
+        EXPECT_VAR_TYPE (map, WPP_OBJ_HASHMAP);
+
+        GETVAR (key, "arg2");
+        EXPECT_VAR_TYPE (key, WPP_OBJ_STRING);
+
+        GETVAR (obj, "arg3");
+
+        {
+          wppObject entry;
+          entry.type = WPP_OBJ_HASHMAP_ENTRY;
+          entry.as.hashmap_entry.key = key->as.string;
+          entry.as.hashmap_entry.obj = malloc (sizeof (wppObject));
+          wpp_exec_obj_eq (exec, entry.as.hashmap_entry.obj, obj);
+
+          map->as.hashmap.data = realloc (
+              map->as.hashmap.data, map->as.hashmap.size + sizeof (wppObject));
+          if (!map->as.hashmap.data)
+            MEM_ERR ();
+
+          wpp_exec_obj_eq (exec, &map->as.hashmap.data[map->as.hashmap.length],
+                           &entry);
+          map->as.hashmap.length++;
+          map->as.hashmap.size += sizeof (wppObject);
+        }
+
+        return true;
       }
       break;
     case CCALL_HASHMAP_GET:
