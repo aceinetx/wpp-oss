@@ -30,7 +30,11 @@ wppObject_free (wppObject *obj)
     {
       obj->type = WPP_OBJ_NULL;
       if (obj->as.hashmap_entry.obj)
-        free (obj->as.hashmap_entry.obj);
+        {
+          wppObject_free (obj->as.hashmap_entry.obj);
+          free (obj->as.hashmap_entry.obj);
+          obj->as.hashmap_entry.obj = NULL;
+        }
     }
   else if (obj->type == WPP_OBJ_ARRAY)
     {
