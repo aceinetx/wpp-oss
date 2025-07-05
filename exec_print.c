@@ -24,6 +24,31 @@ wpp_print_object (wppObject *var, bool raw)
     case WPP_OBJ_FUNCTION:
       printf ("<function %s at %p>", var->name, (void *)var);
       break;
+    case WPP_OBJ_HASHMAP:
+      {
+        unsigned int i;
+        /*
+  printf ("<hashmap %s (%p) of len %u>", var->name,
+  (void *)var->as.hashmap.data, var->as.hashmap.length);
+                                        */
+        printf ("{");
+        for (i = 0; i < var->as.hashmap.length; i++)
+          {
+            wpp_print_object (&var->as.hashmap.data[i], true);
+            if (i < var->as.hashmap.length - 1)
+              {
+                printf (", ");
+              }
+          }
+        printf ("}");
+      }
+      break;
+    case WPP_OBJ_HASHMAP_ENTRY:
+      {
+        printf ("%s: ", var->as.hashmap_entry.key);
+        wpp_print_object (var->as.hashmap_entry.obj, true);
+      }
+      break;
     case WPP_OBJ_ARRAY:
       {
         unsigned int i;
