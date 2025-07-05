@@ -263,22 +263,21 @@ wpp_do_ccall (wppExec *exec)
       break;
     case CCALL_HASHMAP_NEW:
       {
-        wppObject *name, arr;
+        wppObject *name, obj;
         GETVAR (name, "arg1");
         EXPECT_VAR_TYPE (name, WPP_OBJ_STRING);
 
-        arr.type = WPP_OBJ_HASHMAP;
-        arr.as.array.length = 0;
-        arr.as.array.size = 0;
-        arr.as.array.data = NULL;
-        wpp_exec_assign (exec, name->as.string, arr);
-        return false;
+        obj.type = WPP_OBJ_HASHMAP;
+        obj.as.hashmap.length = 0;
+        obj.as.hashmap.size = 0;
+        obj.as.hashmap.data = NULL;
+        wpp_exec_assign (exec, name->as.string, obj);
+        return true;
       }
       break;
     case CCALL_HASHMAP_SET:
       {
         puts ("ccall: not implemented");
-
         return false;
       }
       break;
